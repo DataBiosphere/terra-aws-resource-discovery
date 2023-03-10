@@ -1,0 +1,25 @@
+// Inspired by https://github.com/spotbugs/spotbugs-gradle-plugin/blob/master/gradle/test.gradle
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+tasks.withType(JacocoReport) {
+    reports {
+        xml.required = false
+        csv.required = false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.1
+            }
+        }
+    }
+}
+check.dependsOn jacocoTestCoverageVerification

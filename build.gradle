@@ -1,0 +1,54 @@
+
+plugins {
+    id 'idea'
+    id 'jacoco'
+    id 'java-library'
+    id 'maven-publish'
+
+    id 'com.diffplug.spotless' version '6.16.0'
+    id 'com.github.spotbugs' version '5.0.13'
+    id 'com.jfrog.artifactory' version '4.31.5'
+}
+
+// If true, search local repository (~/.m2/repository/) first for dependencies.
+def useMavenLocal = false
+repositories {
+    if (useMavenLocal) {
+        mavenLocal() // must be listed first to take effect
+    }
+    mavenCentral()
+    maven {
+        url 'https://broadinstitute.jfrog.io/broadinstitute/libs-release-local/'
+    }
+    maven {
+        url 'https://broadinstitute.jfrog.io/broadinstitute/libs-snapshot-local/'
+    }
+}
+
+dependencies {
+    api 'org.apache.commons:commons-math3:3.6.1'
+    implementation 'com.google.guava:guava:31.1-jre'
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+// for scans
+if (hasProperty('buildScan')) {
+    buildScan {
+        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+        termsOfServiceAgree = 'yes'
+    }
+}
+
+apply from: "$rootDir/gradle/dependency-locking.gradle"
+apply from: "$rootDir/gradle/jacoco.gradle"
+apply from: "$rootDir/gradle/javadoc.gradle"
+apply from: "$rootDir/gradle/publishing.gradle"
+apply from: "$rootDir/gradle/spotbugs.gradle"
+apply from: "$rootDir/gradle/spotless.gradle"
+apply from: "$rootDir/gradle/testing.gradle"
+
