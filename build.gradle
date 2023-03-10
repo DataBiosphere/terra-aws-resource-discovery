@@ -25,10 +25,7 @@ repositories {
     }
 }
 
-dependencies {
-    api 'org.apache.commons:commons-math3:3.6.1'
-    implementation 'com.google.guava:guava:31.1-jre'
-}
+
 
 java {
     toolchain {
@@ -44,11 +41,13 @@ if (hasProperty('buildScan')) {
     }
 }
 
-apply from: "$rootDir/gradle/dependency-locking.gradle"
-apply from: "$rootDir/gradle/jacoco.gradle"
-apply from: "$rootDir/gradle/javadoc.gradle"
-apply from: "$rootDir/gradle/publishing.gradle"
-apply from: "$rootDir/gradle/spotbugs.gradle"
-apply from: "$rootDir/gradle/spotless.gradle"
-apply from: "$rootDir/gradle/testing.gradle"
+def gradleIncDir= "$rootDir/gradle"
+apply(from: "$gradleIncDir/dependencies.gradle")
+apply from: "$gradleIncDir/dependency-locking.gradle"
+apply from: "$gradleIncDir/jacoco.gradle"
+apply from: "$gradleIncDir/javadoc.gradle"
+apply from: "$gradleIncDir/publishing.gradle"
+apply from: "$gradleIncDir/spotbugs.gradle"
+apply from: "$gradleIncDir/spotless.gradle"
+apply from: "$gradleIncDir/testing.gradle"
 
