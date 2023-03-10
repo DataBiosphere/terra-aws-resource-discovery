@@ -1,0 +1,12 @@
+// Library Dependencies, Versions, etc.
+dependencies {
+    ext {
+        junitJupiter = '5.9.2'
+    }
+
+    api 'org.apache.commons:commons-math3:3.6.1'
+    implementation 'com.google.guava:guava:31.1-jre'
+
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: "${junitJupiter}"
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: "${junitJupiter}"
+}
