@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "EnvironmentModel",
+  "namespace": "bio.terra.aws.resource.discovery.avro",
+  "fields": [
+    {
+      "name": "role_arn_terra_notebook",
+      "type": "string"
+    },
+    {
+      "name": "role_arn_terra_user",
+      "type": "string"
+    },
+    {
+      "name": "role_arn_terra_workspace_manager",
+      "type": "string"
+    }
+  ]
+}

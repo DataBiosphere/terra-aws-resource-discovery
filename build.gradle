@@ -6,6 +6,7 @@ plugins {
     id 'maven-publish'
 
     id 'com.diffplug.spotless' version '6.16.0'
+    id 'com.github.davidmc24.gradle.plugin.avro' version '1.6.0'
     id 'com.github.spotbugs' version '5.0.13'
     id 'com.jfrog.artifactory' version '4.31.5'
     id 'com.github.davidmc24.gradle.plugin.avro' version '1.6.0'
@@ -43,6 +44,7 @@ if (hasProperty('buildScan')) {
 }
 
 def gradleIncDir= "$rootDir/gradle"
+apply(from: "$gradleIncDir/avro.gradle")
 apply(from: "$gradleIncDir/dependencies.gradle")
 apply from: "$gradleIncDir/dependency-locking.gradle"
 apply from: "$gradleIncDir/jacoco.gradle"
@@ -51,4 +53,6 @@ apply from: "$gradleIncDir/publishing.gradle"
 apply from: "$gradleIncDir/spotbugs.gradle"
 apply from: "$gradleIncDir/spotless.gradle"
 apply from: "$gradleIncDir/testing.gradle"
+
+
 
