@@ -1,0 +1,17 @@
+
+generateAvroJava {
+    source("src/resources/avro")
+}
+
+
+/*
+def generateAvro = tasks.register("generateAvro", GenerateAvroJavaTask) {
+    source = "src/resources/avro"
+    outputDir = file("${buildDir}/avro")
+}
+
+ */
+
+tasks.named("compileJava").configure {
+    source(generateAvroJava)
+}

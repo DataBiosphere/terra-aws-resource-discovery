@@ -1,4 +1,4 @@
-package bio.terra.discovery;
+package bio.terra.aws.resource.discovery;
 
 import java.io.IOException;
 import java.time.Duration;

@@ -3,7 +3,7 @@ jacoco {
     toolVersion = "0.8.8"
 }
 
-tasks.withType(JacocoTestReport) {
+tasks.withType(JacocoReport) {
     reports {
         xml.required = false
         csv.required = false

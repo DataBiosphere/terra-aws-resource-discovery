@@ -2,6 +2,7 @@
 plugins {
     id 'idea'
     id 'jacoco'
+    id 'java'
     id 'java-library'
     id 'maven-publish'
 
@@ -9,7 +10,6 @@ plugins {
     id 'com.github.davidmc24.gradle.plugin.avro' version '1.6.0'
     id 'com.github.spotbugs' version '5.0.13'
     id 'com.jfrog.artifactory' version '4.31.5'
-    id 'com.github.davidmc24.gradle.plugin.avro' version '1.6.0'
 }
 
 // If true, search local repository (~/.m2/repository/) first for dependencies.
@@ -27,8 +27,6 @@ repositories {
     }
 }
 
-
-
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
@@ -44,8 +42,8 @@ if (hasProperty('buildScan')) {
 }
 
 def gradleIncDir= "$rootDir/gradle"
-apply(from: "$gradleIncDir/avro.gradle")
-apply(from: "$gradleIncDir/dependencies.gradle")
+apply from: "$gradleIncDir/avro.gradle"
+apply from: "$gradleIncDir/dependencies.gradle"
 apply from: "$gradleIncDir/dependency-locking.gradle"
 apply from: "$gradleIncDir/jacoco.gradle"
 apply from: "$gradleIncDir/javadoc.gradle"
@@ -53,6 +51,3 @@ apply from: "$gradleIncDir/publishing.gradle"
 apply from: "$gradleIncDir/spotbugs.gradle"
 apply from: "$gradleIncDir/spotless.gradle"
 apply from: "$gradleIncDir/testing.gradle"
-
-
-

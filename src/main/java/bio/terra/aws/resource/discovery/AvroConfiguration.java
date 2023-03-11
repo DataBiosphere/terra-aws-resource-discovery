@@ -1,4 +1,4 @@
-package bio.terra.discovery;
+package bio.terra.aws.resource.discovery;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.nio.charset.StandardCharsets;

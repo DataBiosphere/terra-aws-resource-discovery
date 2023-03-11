@@ -1,4 +1,4 @@
-package bio.terra.discovery;
+package bio.terra.aws.resource.discovery;
 
 import bio.terra.discovery.avro.EnvironmentModel;
 import bio.terra.discovery.avro.LandingZoneModel;
