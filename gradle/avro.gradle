@@ -1,6 +1,7 @@
 
 generateAvroJava {
     source("src/resources/avro")
+    outputDir = file("src/main/bio/terra/aws/resource/discovery/avro")
 }
 
 
@@ -12,6 +13,5 @@ def generateAvro = tasks.register("generateAvro", GenerateAvroJavaTask) {
 
  */
 
-tasks.named("compileJava").configure {
-    source(generateAvroJava)
-}
+tasks.compileJava.dependsOn(generateAvroJava)
+

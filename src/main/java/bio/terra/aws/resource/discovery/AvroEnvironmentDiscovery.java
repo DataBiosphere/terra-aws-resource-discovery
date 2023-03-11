@@ -1,6 +1,7 @@
 package bio.terra.aws.resource.discovery;
 
-import bio.terra.discovery.avro.EnvironmentModel;
+import bio.terra.aws.resource.discovery.avro.EnvironmentModel;
+import bio.terra.discovexry.avro.EnvironmentModel;
 import bio.terra.discovery.avro.LandingZoneModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
