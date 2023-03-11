@@ -6,6 +6,6 @@ spotless {
     java {
         googleJavaFormat()
         removeUnusedImports()
-        targetExclude "${buildDir}/**"
+        targetExclude "build/**"
     }
 }
