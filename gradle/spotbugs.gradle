@@ -3,6 +3,7 @@ spotbugs {
     // This makes the "html" reports come out in plain text so you can just open the file in IntelliJ
     // and look at your bugs instead of having to switch to a browser.
     extraArgs = ['-emacs']
+    excludeFilter.set(file("gradle/spotbugsExclude.xml"))
 }
 spotbugsMain {
     reports {

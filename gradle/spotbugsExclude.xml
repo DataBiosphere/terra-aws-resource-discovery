@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Ignore Avro Generated Code -->
+    <Match>
+        <Package name="bio.terra.discovery.avro"/>
+    </Match>
+    <!-- https://github.com/spotbugs/spotbugs/issues/1797 -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+        <Class name="bio.terra.discovery.S3EnvironmentDiscovery"/>
+        <!-- ctor -->
+        <Method name="&lt;init&gt;"/>
+    </Match>
+</FindBugsFilter>

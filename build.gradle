@@ -8,6 +8,7 @@ plugins {
     id 'com.diffplug.spotless' version '6.16.0'
     id 'com.github.spotbugs' version '5.0.13'
     id 'com.jfrog.artifactory' version '4.31.5'
+    id 'com.github.davidmc24.gradle.plugin.avro' version '1.6.0'
 }
 
 // If true, search local repository (~/.m2/repository/) first for dependencies.
