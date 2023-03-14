@@ -1,14 +1,21 @@
 // Library Dependencies, Versions, etc.
 dependencies {
     ext {
+        avro = '1.11.1'
         junitJupiter = '5.9.2'
+
+        diffplugSpotless = '6.10.0'
+        javaFormat = '1.16.0'
     }
 
-    compileOnly group: 'com.diffplug.spotless', name: 'spotless-plugin-gradle', version: '6.10.0'
-    compileOnly group: 'com.google.googlejavaformat', name: 'google-java-format', version: '1.11.0'
+    // Used internally, and not exposed to consumers on their own compile classpath.
+    implementation group: 'org.apache.avro', name: 'avro-compiler', version: "${avro}"
 
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation group: 'org.apache.avro', name: 'avro', version: '1.11.1'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: "${junitJupiter}"
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: "${junitJupiter}"
+
+    compileOnly group: 'com.diffplug.spotless', name: 'spotless-plugin-gradle', version: "${diffplugSpotless}"
+    compileOnly group: 'com.google.googlejavaformat', name: 'google-java-format', version: "${javaFormat}"
 
     // AWS dependencies
     implementation platform('software.amazon.awssdk:bom:2.18.34')
@@ -19,7 +26,4 @@ dependencies {
     // Dependencies to enable mocking S3
     testImplementation group: 'io.findify', name: 's3mock_2.13', version: '0.2.6'
     testImplementation group: 'org.eclipse.jdt', name: 'org.eclipse.jdt.launching', version: '3.10.0'
-
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: "${junitJupiter}"
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: "${junitJupiter}"
 }
