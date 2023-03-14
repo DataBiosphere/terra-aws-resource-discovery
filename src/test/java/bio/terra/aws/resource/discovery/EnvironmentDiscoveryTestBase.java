@@ -7,10 +7,6 @@ import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
-
-import bio.terra.aws.resource.discovery.Environment;
-import bio.terra.aws.resource.discovery.EnvironmentDiscovery;
-import bio.terra.aws.resource.discovery.LandingZone;
 import org.junit.jupiter.api.Assertions;
 import software.amazon.awssdk.arns.Arn;
 import software.amazon.awssdk.regions.Region;
