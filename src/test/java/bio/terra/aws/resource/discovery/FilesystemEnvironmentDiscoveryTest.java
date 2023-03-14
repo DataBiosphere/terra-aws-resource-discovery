@@ -1,7 +1,8 @@
-package bio.terra.discovery;
+package bio.terra.aws.resource.discovery;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

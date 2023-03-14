@@ -1,8 +1,9 @@
-package bio.terra.discovery;
+package bio.terra.aws.resource.discovery;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

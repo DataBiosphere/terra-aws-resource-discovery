@@ -1,4 +1,4 @@
-package bio.terra.discovery;
+package bio.terra.aws.resource.discovery;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.io.IOException;

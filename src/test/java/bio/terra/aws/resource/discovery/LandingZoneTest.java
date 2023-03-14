@@ -1,7 +1,8 @@
-package bio.terra.discovery;
+package bio.terra.aws.resource.discovery;
 
 import java.util.Optional;
 import java.util.UUID;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import software.amazon.awssdk.arns.Arn;
