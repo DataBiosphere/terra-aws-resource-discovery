@@ -1,14 +1,16 @@
 name: Publish
-description: 'Reusable workflow to publish to Artifactory'
 
 on:
   workflow_call:
     inputs:
-      subproject:
-        required: false
-        # default: "" # runs at root
       artifactory_repo_key:
+        description: 'Artifactory repository key'
+        type: string
         required: true
+      subproject:
+        description: 'Subproject at the repository root'
+        type: string
+        required: false
 
 jobs:
   publish-job:

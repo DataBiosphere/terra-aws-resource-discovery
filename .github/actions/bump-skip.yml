@@ -4,7 +4,9 @@ description: 'Set skip-out when we are doing a version bump'
 
 inputs:
   event-name:
+    description: 'Github event name'
     required: true
+
 
 outputs:
   is-bump:
