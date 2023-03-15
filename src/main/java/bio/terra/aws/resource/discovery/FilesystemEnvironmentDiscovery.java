@@ -1,4 +1,4 @@
-package bio.terra.discovery;
+package bio.terra.aws.resource.discovery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
@@ -50,7 +50,7 @@ public class FilesystemEnvironmentDiscovery extends AvroEnvironmentDiscovery {
   public FilesystemEnvironmentDiscovery(Path basePath) {
     if (!Files.exists(basePath)) {
       throw new NoSuchElementException(
-          String.format("Base path '%s' does not exist!", basePath.toString()));
+          String.format("Base path '%s' does not exist!", basePath));
     }
     this.basePath = basePath;
   }

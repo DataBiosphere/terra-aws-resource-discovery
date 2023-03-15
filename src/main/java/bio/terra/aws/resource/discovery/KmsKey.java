@@ -1,4 +1,4 @@
-package bio.terra.discovery;
+package bio.terra.aws.resource.discovery;
 
 import java.util.UUID;
 import software.amazon.awssdk.arns.Arn;

@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "LandingZoneModel",
-  "namespace": "bio.terra.discovery.avro",
+  "namespace": "bio.terra.aws.resource.discovery.avro",
   "fields": [
     {
       "name": "bucket_arn",

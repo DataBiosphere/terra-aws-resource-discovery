@@ -1,4 +1,4 @@
-package bio.terra.discovery;
+package bio.terra.aws.resource.discovery;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 

@@ -1,7 +1,7 @@
-package bio.terra.discovery;
+package bio.terra.aws.resource.discovery;
 
-import bio.terra.discovery.avro.EnvironmentModel;
-import bio.terra.discovery.avro.LandingZoneModel;
+import bio.terra.aws.resource.discovery.avro.EnvironmentModel;
+import bio.terra.aws.resource.discovery.avro.LandingZoneModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.InputMismatchException;
@@ -53,7 +53,7 @@ public abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
    *     instances.
    * @return An {@link AvroConfiguration} object describing the Global Support Resources in the
    *     Terra Environment.
-   * @throws IOException
+   * @throws IOException IOException
    */
   protected abstract AvroConfiguration getEnvironmentConfiguration(ObjectMapper mapper)
       throws IOException;
@@ -68,7 +68,7 @@ public abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
    * @return A populated {@link Optional<AvroConfiguration>} object describing Regional Support
    *     Resources if a Terra Landing Zone exists in the Environment for the passed AWS Region, an
    *     empty {@link Optional<AvroConfiguration>} otherwise.
-   * @throws IOException
+   * @throws IOException IOException
    */
   protected abstract Map<Region, AvroConfiguration> getLandingZoneConfigurations(
       ObjectMapper mapper) throws IOException;
@@ -163,7 +163,7 @@ public abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
    * @param readerSchema Provides the reader schema used for Java code generation.
    * @return The marshalled Java object of type T
    * @param <T> Type of generated Java object to create from passed Avro record data and schemas.
-   * @throws IOException
+   * @throws IOException IOException
    */
   private static <T> T parseModel(AvroConfiguration configuration, Schema readerSchema)
       throws IOException {

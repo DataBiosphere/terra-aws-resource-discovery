@@ -1,4 +1,4 @@
-package bio.terra.discovery;
+package bio.terra.aws.resource.discovery;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
