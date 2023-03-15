@@ -15,7 +15,7 @@ on:
         default: hotfix.*
       release-branches:
         description: 'Release branch'
-        type: boolean
+        type: string
         required: false
         default: main
       version_file_path:
