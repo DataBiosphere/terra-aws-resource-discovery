@@ -1,9 +1,7 @@
 name: Publish
-description: 'Publish to Artifactory'
+description: 'Reusable workflow to publish to Artifactory'
 
 on:
-  workflow_dispatch: {}
-
   workflow_call:
     inputs:
       subproject:
