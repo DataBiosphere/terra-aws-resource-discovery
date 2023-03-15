@@ -49,8 +49,7 @@ public class FilesystemEnvironmentDiscovery extends AvroEnvironmentDiscovery {
    */
   public FilesystemEnvironmentDiscovery(Path basePath) {
     if (!Files.exists(basePath)) {
-      throw new NoSuchElementException(
-          String.format("Base path '%s' does not exist!", basePath));
+      throw new NoSuchElementException(String.format("Base path '%s' does not exist!", basePath));
     }
     this.basePath = basePath;
   }
@@ -61,7 +60,7 @@ public class FilesystemEnvironmentDiscovery extends AvroEnvironmentDiscovery {
   }
 
   private Path getVersionSubdirectoryPath() {
-    return basePath.resolve(String.format("V%d", SCHEMA_MAJOR_VERSION));
+    return basePath.resolve(String.format("v%d", SCHEMA_MAJOR_VERSION));
   }
 
   private Path getEnvironmentSubdirectoryPath() {

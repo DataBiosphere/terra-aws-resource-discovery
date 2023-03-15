@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import software.amazon.awssdk.auth.credentials.AnonymousCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
 public class S3EnvironmentDiscoveryTest extends EnvironmentDiscoveryTestBase {
@@ -33,6 +34,7 @@ public class S3EnvironmentDiscoveryTest extends EnvironmentDiscoveryTestBase {
 
     s3Client =
         S3Client.builder()
+            .region(Region.AWS_GLOBAL)
             .forcePathStyle(true)
             .endpointOverride(uri)
             .credentialsProvider(AnonymousCredentialsProvider.create())
