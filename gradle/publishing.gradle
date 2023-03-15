@@ -18,9 +18,9 @@ gradle.taskGraph.whenReady { taskGraph ->
 publishing {
     publications {
         terraAwsResourceDiscovery(MavenPublication) {
-            groupId = libGroup
+            groupId = gradle.ext.projectGroup
             artifactId = rootProject.name
-            version = libVersion
+            version = gradle.ext.releaseVersion
             from components.java
         }
     }
