@@ -2,7 +2,7 @@
 <FindBugsFilter>
     <!-- Ignore Avro Generated Code -->
     <Match>
-        <Package name="bio.terra.discovery.avro"/>
+        <Package name="bio.terra.aws.resource.discovery.avro"/>
     </Match>
     <!-- https://github.com/spotbugs/spotbugs/issues/1797 -->
     <Match>
