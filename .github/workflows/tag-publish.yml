@@ -1,4 +1,4 @@
-name: Tag, publish, deploy
+name: Tag, publish
 
 # TODO: Set up publish-on-push when repo is ready
 on:

@@ -1,18 +1,21 @@
 name: Tag
-description: 'Generate a tag'
+description: 'Reusable workflow to generate a tag'
 
 on:
-  workflow_dispatch: {}
-
   workflow_call:
     inputs:
+      bump:
+        required: false
+        default: patch
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
       hotfix_branches:
         required: false
         default: hotfix.*
-      default_bump:
-        required: false
-        default: patch
-      release_branches:
+      release-branches:
         required: false
         default: main
       version_file_path:
@@ -39,9 +42,22 @@ jobs:
       is-bump: ${{ steps.bump-skip.outputs.is-bump }}
 
     steps:
+      - name: Set part of semantic version to bump
+        id: controls
+        run: |
+          SEMVER_PART=${{ github.event.inputs.default_bump }}
+          CHECKOUT_BRANCH=${{ github.event.inputs.release_branches }}
+          if ${{github.event_name == 'push' }}; then
+            SEMVER_PART='patch'
+            CHECKOUT_BRANCH="$GITHUB_REF"
+          fi
+          echo semver_part=$SEMVER_PART >> $GITHUB_OUTPUT
+          echo checkout_branch=$CHECKOUT_BRANCH >> $GITHUB_OUTPUT  
+
       - name: Checkout current code
         uses: actions/checkout@v3
         with:
+          ref: ${{ steps.controls.outputs.checkout_branch }}
           token: ${{ secrets.BROADBOT_TOKEN }} # this allows the push to succeed later
 
       - name: Skip version bump merges
@@ -51,13 +67,15 @@ jobs:
           event-name: ${{ github.event_name }}
 
       - name: Bump the tag to a new version
+        if: steps.bump-skip.outputs.is-bump == 'no'
         # https://github.com/DataBiosphere/github-actions/tree/master/actions/bumper
         uses: databiosphere/github-actions/actions/bumper@bumper-0.0.6
         id: tag
         env:
+          DEFAULT_BUMP: ${{ github.event.inputs.bump }}
           GITHUB_TOKEN: ${{ secrets.BROADBOT_TOKEN }}
           HOTFIX_BRANCHES: ${{ github.event.inputs.hotfix_branches }}
-          DEFAULT_BUMP: ${{ github.event.inputs.default_bump }}
+          OVERRIDE_BUMP: ${{ steps.controls.outputs.semver_part }}
           RELEASE_BRANCHES: ${{ github.event.inputs.release_branches }}
           VERSION_FILE_PATH: ${{ github.event.inputs.version_file_path }}
           VERSION_LINE_MATCH: ${{ github.event.inputs.version_line_match }}
