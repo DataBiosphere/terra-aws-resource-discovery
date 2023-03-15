@@ -1,0 +1,64 @@
+name: Tag
+description: 'Generate a tag'
+
+on:
+  workflow_dispatch: {}
+
+  workflow_call:
+    inputs:
+      hotfix_branches:
+        required: false
+        default: hotfix.*
+      default_bump:
+        required: false
+        default: patch
+      release_branches:
+        required: false
+        default: main
+      version_file_path:
+        required: false
+        default: settings.gradle
+      version_line_match:
+        required: false
+        default: "^\\s*gradle.ext.releaseVersion\\s*=\\s*'.*'"
+      version_suffix:
+        required: false
+        default: SNAPSHOT
+
+    outputs:
+      tag:
+        description: 'Generated tag'
+        value: ${{ jobs.tag-job.outputs.tag }}
+
+jobs:
+  tag-job:
+    runs-on: ubuntu-latest
+
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+      is-bump: ${{ steps.bump-skip.outputs.is-bump }}
+
+    steps:
+      - name: Checkout current code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.BROADBOT_TOKEN }} # this allows the push to succeed later
+
+      - name: Skip version bump merges
+        id: bump-skip
+        uses: ./.github/actions/bump-skip
+        with:
+          event-name: ${{ github.event_name }}
+
+      - name: Bump the tag to a new version
+        # https://github.com/DataBiosphere/github-actions/tree/master/actions/bumper
+        uses: databiosphere/github-actions/actions/bumper@bumper-0.0.6
+        id: tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.BROADBOT_TOKEN }}
+          HOTFIX_BRANCHES: ${{ github.event.inputs.hotfix_branches }}
+          DEFAULT_BUMP: ${{ github.event.inputs.default_bump }}
+          RELEASE_BRANCHES: ${{ github.event.inputs.release_branches }}
+          VERSION_FILE_PATH: ${{ github.event.inputs.version_file_path }}
+          VERSION_LINE_MATCH: ${{ github.event.inputs.version_line_match }}
+          VERSION_SUFFIX: ${{ github.event.inputs.version_suffix }}

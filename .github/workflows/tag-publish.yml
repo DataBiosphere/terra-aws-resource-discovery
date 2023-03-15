@@ -1,5 +1,4 @@
-name: Bump, Tag, and Publish
-# name: development version bump
+name: Tag, publish, deploy
 
 # TODO: Set up publish-on-push when repo is ready
 on:
@@ -8,99 +7,14 @@ on:
   #  branches: [ main ]
   #  paths-ignore: [ '**.md' ]
 
-env:
-  VAULT_ADDR: https://clotho.broadinstitute.org:8200
-  ARTIFACTORY_ACCOUNT_PATH: secret/dsp/accts/artifactory/dsdejenkins
-
 jobs:
-  publish_snapshot:
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:12.3
-        env:
-          POSTGRES_PASSWORD: postgres
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-    steps:
-      - name: Checkout current code
-        uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.BROADBOT_GITHUB_TOKEN }}
-          ref: main
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Pull Vault image
-        run: docker pull vault:1.1.0
-      # Currently, there's no way to add capabilities to Docker actions on Git, and Vault needs IPC_LOCK to run.
-      - name: Get Vault token
-        id: vault-token-step
-        run: |
-          VAULT_TOKEN=$(docker run --rm --cap-add IPC_LOCK \
-            -e "VAULT_ADDR=${VAULT_ADDR}" \
-            vault:1.1.0 \
-            vault write -field token \
-              auth/approle/login role_id=${{ secrets.VAULT_APPROLE_ROLE_ID }} \
-              secret_id=${{ secrets.VAULT_APPROLE_SECRET_ID }})
-          echo ::add-mask::$VAULT_TOKEN
-          echo ::set-output name=vault-token::$VAULT_TOKEN
-      - name: Get artifactory credentials from Vault
-        id: vault-secret-step
-        run: |
-          ARTIFACTORY_USERNAME=$(docker run --rm --cap-add IPC_LOCK \
-            -e "VAULT_TOKEN=${{ steps.vault-token-step.outputs.vault-token }}" \
-            -e "VAULT_ADDR=${VAULT_ADDR}" \
-            vault:1.1.0 \
-            vault read -field username ${ARTIFACTORY_ACCOUNT_PATH})
-          ARTIFACTORY_PASSWORD=$(docker run --rm --cap-add IPC_LOCK \
-            -e "VAULT_TOKEN=${{ steps.vault-token-step.outputs.vault-token }}" \
-            -e "VAULT_ADDR=${VAULT_ADDR}" \
-            vault:1.1.0 \
-            vault read -field password ${ARTIFACTORY_ACCOUNT_PATH})
-          echo ::add-mask::$ARTIFACTORY_USERNAME
-          echo ::set-output name=artifactory-username::$ARTIFACTORY_USERNAME
-          echo ::add-mask::$ARTIFACTORY_PASSWORD
-          echo ::set-output name=artifactory-password::$ARTIFACTORY_PASSWORD
-      # See https://github.com/actions/cache/blob/main/examples.md#java---gradle
-      - name: Cache Gradle packages
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: v1-${{ runner.os }}-gradle-${{ hashfiles('**/gradle-wrapper.properties') }}-${{ hashFiles('**/*.gradle') }}
-          restore-keys: v1-${{ runner.os }}-gradle-${{ hashfiles('**/gradle-wrapper.properties') }}
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Build, assemble, and test
-        id: build-assemble-test
-        run: ./gradlew build
-      - name: Upload Test Reports
-        if: always()
-        uses: actions/upload-artifact@v1
-        with:
-          name: Test Reports
-          path: build/reports
-      - name: "Bump the tag to a new version"
-        uses: databiosphere/github-actions/actions/bumper@bumper-0.0.6
-        env:
-          GITHUB_TOKEN: ${{ secrets.BROADBOT_GITHUB_TOKEN }}
-          DEFAULT_BUMP: patch
-          RELEASE_BRANCHES: main
-          VERSION_FILE_PATH: build.gradle
-          VERSION_LINE_MATCH: ^version
-          VERSION_SUFFIX: SNAPSHOT
-      - name: "Publish to Artifactory"
-        run: ./gradlew artifactoryPublish
-        env:
-          ARTIFACTORY_USERNAME: ${{ steps.vault-secret-step.outputs.artifactory-username }}
-          ARTIFACTORY_PASSWORD: ${{ steps.vault-secret-step.outputs.artifactory-password }}
-          ARTIFACTORY_REPO_KEY: "libs-snapshot-local"
+  tag:
+    uses: ./.github/workflows/tag.yml
+    secrets: inherit
+
+  publish:
+    needs: [ tag ]
+    uses: ./.github/workflows/publish.yml
+    secrets: inherit
+    with:
+      artifactory_repo_key: libs-snapshot-local
