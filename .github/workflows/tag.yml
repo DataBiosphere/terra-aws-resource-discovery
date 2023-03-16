@@ -13,7 +13,7 @@ on:
         type: string
         required: false
         default: hotfix.*
-      release-branches:
+      release_branches:
         description: 'Release branch'
         type: string
         required: false
@@ -42,7 +42,7 @@ on:
 jobs:
   tag-job:
     runs-on: ubuntu-latest
-
+    #if: "!contains( github.event.sender.login, 'broadbot')" TODO
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
       is-bump: ${{ steps.bump-skip.outputs.is-bump }}
@@ -51,7 +51,7 @@ jobs:
       - name: Set part of semantic version to bump
         id: controls
         run: |
-          SEMVER_PART=${{ github.event.inputs.default_bump }}
+          SEMVER_PART=${{ github.event.inputs.bump }}
           CHECKOUT_BRANCH=${{ github.event.inputs.release_branches }}
           if ${{github.event_name == 'push' }}; then
             SEMVER_PART='patch'
