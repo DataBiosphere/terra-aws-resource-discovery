@@ -12,9 +12,30 @@ jobs:
     uses: ./.github/workflows/tag.yml
     secrets: inherit
 
+  release:
+    needs: [ tag ]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout current code
+        uses: actions/checkout@v3
+        with:
+          ref: $GITHUB_REF
+          token: ${{ secrets.BROADBOT_TOKEN }}
+
+      - name: Create a release
+        id: create-release
+        run: |
+          ./tools/create-release.sh ${{ needs.tag.outputs.tag }} true
+        env:
+          GITHUB_TOKEN: ${{ secrets.BROADBOT_TOKEN }}
+
   publish:
     needs: [ tag ]
     uses: ./.github/workflows/publish.yml
     secrets: inherit
     with:
-      artifactory_repo_key: libs-snapshot-local
+      artifactory_repo_key: 'libs-snapshot-local'
