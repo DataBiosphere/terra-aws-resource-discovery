@@ -44,7 +44,7 @@ jobs:
       - name: Publish to Artifactory
         run: |
           chmod +x gradlew
-          ./gradlew ${{ subproject }}:artifactoryPublish
+          ./gradlew ${{ inputs.subproject }}:artifactoryPublish
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
