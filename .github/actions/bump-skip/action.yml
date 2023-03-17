@@ -18,6 +18,7 @@ runs:
   steps:
     - name: Bump test
       id: bump-test
+      shell: bash
       run: |
         log=$(git log --pretty='%B')
         echo "log=$log"
@@ -28,4 +29,3 @@ runs:
         fi
         echo "is-bump=$IS_BUMP"
         echo is-bump=$IS_BUMP >> $GITHUB_OUTPUT
-      shell: bash

@@ -2,63 +2,43 @@ name: Build and Run Tests
 
 on:
   workflow_dispatch: {}
+  # TODO(TERRA-400): Set up test-on-push when repo is ready
   # push:
     # branches: [ main ]
     # paths-ignore: [ '**.md' ]
   pull_request:
-    # Branch settings require status checks before merging, so don't add paths-ignore.
     branches: [ main ]
 
 jobs:
-  linter:
+  build-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - name: Checkout current code
-        uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/checkout@v3
         with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Cache Gradle packages
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: v1-${{ runner.os }}-gradle-${{ hashfiles('**/gradle-wrapper.properties') }}-${{ hashFiles('**/*.gradle') }}
-          restore-keys: v1-${{ runner.os }}-gradle-${{ hashfiles('**/gradle-wrapper.properties') }}
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+          token: ${{ secrets.BROADBOT_TOKEN }}
+
+      - name: Setup gradlew
+        uses: ./.github/actions/setup-gradlew
+
       - name: Run linter
-        run: |
-          ./gradlew spotlessCheck
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout current code
-        uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: 17
-      - name: Cache Gradle packages
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: v1-${{ runner.os }}-gradle-${{ hashfiles('**/gradle-wrapper.properties') }}-${{ hashFiles('**/*.gradle') }}
-          restore-keys: v1-${{ runner.os }}-gradle-${{ hashfiles('**/gradle-wrapper.properties') }}
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        id: linter
+        run: ./gradlew spotlessCheck
+
+      - name: Run static analysis
+        id: static-analysis
+        run: ./gradlew spotbugsMain spotbugsTest
+
       - name: Build, assemble, and test
         id: build-test
         run: ./gradlew build --scan
+
       - name: Upload Test Reports
-        if: always()
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: Test Reports
           path: build/reports

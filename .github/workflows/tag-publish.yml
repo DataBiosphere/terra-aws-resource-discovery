@@ -1,11 +1,20 @@
 name: Tag, publish
 
-# TODO: Set up publish-on-push when repo is ready
 on:
-  workflow_dispatch: {}
-  #push:
-  #  branches: [ main ]
-  #  paths-ignore: [ '**.md' ]
+  workflow_dispatch:
+    inputs: #TODO(TERRA-432) determine this automatically
+      bump-type:
+        description: 'Type of bump'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        default: patch
+
+  push:
+    branches: [ main ]
+    paths-ignore: [ '**.md' ]
 
 jobs:
   tag:
@@ -31,15 +40,13 @@ jobs:
 
       - name: Fetch latest tags
         id: git-pull
-        run: |
-          git pull
+        run: git pull
         env:
           GITHUB_TOKEN: ${{ secrets.BROADBOT_TOKEN }}
 
       - name: Create a release
         id: create-release
-        run: |
-          ./tools/create-release.sh ${{ needs.tag.outputs.tag }} true
+        run: ./tools/create-release.sh ${{ needs.tag.outputs.tag }} true
         env:
           GITHUB_TOKEN: ${{ secrets.BROADBOT_TOKEN }}
 
