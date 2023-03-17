@@ -9,6 +9,7 @@ on:
 
 jobs:
   tag:
+    if: "!contains( github.event.sender.login, 'broadbot')"
     uses: ./.github/workflows/tag.yml
     secrets: inherit
     with:
@@ -18,6 +19,7 @@ jobs:
   release:
     needs: [ tag ]
     runs-on: ubuntu-latest
+    if: ${{ needs.tag.outputs.tag }} != ""
     defaults:
       run:
         shell: bash
@@ -37,6 +39,7 @@ jobs:
 
   publish:
     needs: [ tag ]
+    if: ${{ needs.tag.outputs.tag }} != ""
     uses: ./.github/workflows/publish.yml
     secrets: inherit
     with:

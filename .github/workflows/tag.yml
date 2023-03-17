@@ -51,7 +51,6 @@ jobs:
       run:
         shell: bash
 
-    #if: "!contains( github.event.sender.login, 'broadbot')" TODO
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
       is-bump: ${{ steps.bump-skip.outputs.is-bump }}
