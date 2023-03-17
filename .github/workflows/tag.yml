@@ -80,7 +80,7 @@ jobs:
       - name: Bump the tag to a new version
         if: steps.bump-skip.outputs.is-bump == 'no'
         # https://github.com/DataBiosphere/github-actions/tree/master/actions/bumper
-        uses: databiosphere/github-actions/actions/bumper@bumper-0.0.6
+        uses: databiosphere/github-actions/actions/bumper@bumper-0.0.7
         id: tag
         env:
           DEFAULT_BUMP: ${{ inputs.bump-type }}
