@@ -56,4 +56,4 @@ jobs:
     uses: ./.github/workflows/publish.yml
     secrets: inherit
     with:
-      artifactory_repo_key: 'libs-snapshot-local'
+      artifactory-repo-key: 'libs-snapshot-local'
