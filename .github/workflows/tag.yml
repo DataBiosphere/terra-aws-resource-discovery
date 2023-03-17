@@ -33,6 +33,11 @@ on:
         type: string
         required: false
         default: SNAPSHOT
+      with-v:
+        description: 'Tag version with v character'
+        type: boolean
+        required: false
+        default: false
 
     outputs:
       tag:
@@ -87,3 +92,4 @@ jobs:
           VERSION_FILE_PATH: ${{ inputs.version-file-path }}
           VERSION_LINE_MATCH: ${{ inputs.version-line-match }}
           VERSION_SUFFIX: ${{ inputs.version-suffix }}
+          WITH_V: ${{ inputs.with-v }}

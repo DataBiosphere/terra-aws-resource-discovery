@@ -11,6 +11,9 @@ jobs:
   tag:
     uses: ./.github/workflows/tag.yml
     secrets: inherit
+    with:
+      release-branches: $GITHUB_REF_NAME
+      with-v: true
 
   release:
     needs: [ tag ]
