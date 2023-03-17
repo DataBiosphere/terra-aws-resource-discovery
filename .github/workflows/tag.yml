@@ -1,4 +1,4 @@
-name: Tag
+name: Generate a new Tag
 
 on:
   workflow_call:
