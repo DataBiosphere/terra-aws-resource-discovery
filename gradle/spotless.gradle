@@ -9,3 +9,5 @@ spotless {
         targetExclude "build/**"
     }
 }
+
+build.dependsOn spotlessApply
