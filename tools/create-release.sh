@@ -6,7 +6,7 @@ set -e
 #
 # Dependencies: gh
 #
-# Inputs: releaseVersion (arg, required) determines the git tag to use for creating the release
+# Inputs: releaseTag (arg, required) determines the git tag to use for creating the release
 #         isRegularRelease (arg, optional) 'false' for a pre-release (default), 'true' for a regular release
 #
 # Usage: ./create-release.sh  0.0.0        --> publishes version 0.0.0 as a pre-release
@@ -18,22 +18,21 @@ if [[ $(basename "$PWD") != 'terra-aws-resource-discovery' ]]; then
   exit 1
 fi
 
-releaseVersion=$1
+releaseTag=$1
 isRegularRelease=$2
 
-if [[ -z "$releaseVersion" ]]; then
-    >&2 echo "ERROR: Usage: tools/publish-release.sh [releaseVersion] [isRegularRelease]"
+if [[ -z "$releaseTag" ]]; then
+    >&2 echo "ERROR: Usage: tools/publish-release.sh [releaseTag] [isRegularRelease]"
     exit 1
 fi
 
-echo "-- Checking if there is a tag that matches provided releaseVersion"
-if [[ -z $(git tag -l "$releaseVersion") ]]; then
+echo "-- Checking if there is a tag that matches provided releaseTag"
+if [[ -z $(git tag -l "$releaseTag") ]]; then
   >&2 echo "ERROR: No tag found matching this version"
   exit 1
 else
   echo "Found tag matching this version"
 fi
-releaseTag="v$releaseVersion"
 
 echo "-- Creating a new GitHub release with the avro schema files"
 if [[ "$isRegularRelease" == "true" ]]; then

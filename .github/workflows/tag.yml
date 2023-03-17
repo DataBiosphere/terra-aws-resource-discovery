@@ -1,4 +1,4 @@
-name: Tag
+name: Generate a new Tag
 
 on:
   workflow_call:
@@ -33,6 +33,11 @@ on:
         type: string
         required: false
         default: SNAPSHOT
+      with-v:
+        description: 'Tag version with v character'
+        type: boolean
+        required: false
+        default: false
 
     outputs:
       tag:
@@ -46,7 +51,6 @@ jobs:
       run:
         shell: bash
 
-    #if: "!contains( github.event.sender.login, 'broadbot')" TODO
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
       is-bump: ${{ steps.bump-skip.outputs.is-bump }}
@@ -87,3 +91,4 @@ jobs:
           VERSION_FILE_PATH: ${{ inputs.version-file-path }}
           VERSION_LINE_MATCH: ${{ inputs.version-line-match }}
           VERSION_SUFFIX: ${{ inputs.version-suffix }}
+          WITH_V: ${{ inputs.with-v }}

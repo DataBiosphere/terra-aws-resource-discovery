@@ -9,12 +9,16 @@ on:
 
 jobs:
   tag:
+    if: "!contains( github.event.sender.login, 'broadbot')"
     uses: ./.github/workflows/tag.yml
     secrets: inherit
+    with:
+      with-v: true
 
   release:
     needs: [ tag ]
     runs-on: ubuntu-latest
+    if: ${{ needs.tag.outputs.tag }} != ""
     defaults:
       run:
         shell: bash
@@ -25,6 +29,13 @@ jobs:
         with:
           token: ${{ secrets.BROADBOT_TOKEN }}
 
+      - name: Fetch latest tags
+        id: git-pull
+        run: |
+          git pull
+        env:
+          GITHUB_TOKEN: ${{ secrets.BROADBOT_TOKEN }}
+
       - name: Create a release
         id: create-release
         run: |
@@ -34,6 +45,7 @@ jobs:
 
   publish:
     needs: [ tag ]
+    if: ${{ needs.tag.outputs.tag }} != ""
     uses: ./.github/workflows/publish.yml
     secrets: inherit
     with:
