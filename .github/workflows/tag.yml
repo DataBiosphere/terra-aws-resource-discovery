@@ -55,7 +55,6 @@ jobs:
       - name: Checkout current code
         uses: actions/checkout@v3
         with:
-          ref: $GITHUB_REF
           token: ${{ secrets.BROADBOT_TOKEN }}
 
       - name: Skip version bump merges
