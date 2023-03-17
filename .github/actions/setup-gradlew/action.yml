@@ -1,20 +1,11 @@
+# This action must be done after the checkout action
 name: 'setup-gradlew'
 description: 'Checkout code and setup gradlew'
-
-inputs:
-  token:
-    description: 'Github token'
-    required: true
 
 runs:
   using: 'composite'
 
   steps:
-    - name: Checkout current code
-      uses: actions/checkout@v3
-      with:
-        token: ${{ inputs.token }}
-
     - name: Set up JDK 17
       uses: actions/setup-java@v2
       with:

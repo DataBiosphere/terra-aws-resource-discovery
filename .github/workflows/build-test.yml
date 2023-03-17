@@ -17,10 +17,13 @@ jobs:
         shell: bash
 
     steps:
-      - name: Checkout current code & setup gradlew
-        uses: ./.github/actions/setup-gradlew
+      - name: Checkout current code
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.BROADBOT_TOKEN }}
+
+      - name: Setup gradlew
+        uses: ./.github/actions/setup-gradlew
 
       - name: Run linter
         id: linter
