@@ -30,6 +30,13 @@ jobs:
         with:
           token: ${{ secrets.BROADBOT_TOKEN }}
 
+      - name: Fetch latest tags
+        id: git-pull
+        run: |
+          git pull
+        env:
+          GITHUB_TOKEN: ${{ secrets.BROADBOT_TOKEN }}
+
       - name: Create a release
         id: create-release
         run: |
