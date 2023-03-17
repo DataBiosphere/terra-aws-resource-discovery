@@ -12,7 +12,7 @@ jobs:
     uses: ./.github/workflows/tag.yml
     secrets: inherit
     with:
-      release-branches: $GITHUB_REF_NAME
+      release-branches: ${{ github.ref_name }}
       with-v: true
 
   release:
