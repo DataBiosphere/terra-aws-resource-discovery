@@ -1,4 +1,4 @@
-name: Publish
+name: Publish to Artifactory
 
 on:
   workflow_call:
@@ -15,10 +15,16 @@ on:
 jobs:
   publish-job:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: Checkout current code
         uses: actions/checkout@v3
+        with:
+          ref: $GITHUB_REF
+          token: ${{ secrets.BROADBOT_TOKEN }}
 
       - name: Set up JDK 17
         uses: actions/setup-java@v2
@@ -35,12 +41,11 @@ jobs:
           key: v1-${{ runner.os }}-gradle-${{ hashfiles('**/gradle-wrapper.properties') }}-${{ hashFiles('**/*.gradle') }}
           restore-keys: v1-${{ runner.os }}-gradle-${{ hashfiles('**/gradle-wrapper.properties') }}
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
       - name: Publish to Artifactory
-        run: ./gradlew ${{ github.event.inputs.subproject }}:artifactoryPublish
+        run: |
+          chmod +x gradlew
+          ./gradlew ${{ subproject }}:artifactoryPublish
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
-          ARTIFACTORY_REPO_KEY: ${{ github.event.inputs.artifactory_repo_key }}
+          ARTIFACTORY_REPO_KEY: ${{ inputs.artifactory_repo_key }}

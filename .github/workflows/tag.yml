@@ -3,32 +3,32 @@ name: Tag
 on:
   workflow_call:
     inputs:
-      bump:
+      bump-type:
         description: 'Type of bump'
         type: string
         required: false
         default: patch
-      hotfix_branches:
+      hotfix-branches:
         description: 'Name of the hotfix branch'
         type: string
         required: false
         default: hotfix.*
-      release_branches:
+      release-branches:
         description: 'Release branch'
         type: string
         required: false
         default: main
-      version_file_path:
+      version-file-path:
         description: 'Path to file containing the version string'
         type: string
         required: false
         default: settings.gradle
-      version_line_match:
+      version-line-match:
         description: 'Line containing the version string'
         type: string
         required: false
         default: "^\\s*gradle.ext.releaseVersion\\s*=\\s*'.*'"
-      version_suffix:
+      version-suffix:
         description: 'Version suffix'
         type: string
         required: false
@@ -42,29 +42,21 @@ on:
 jobs:
   tag-job:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
     #if: "!contains( github.event.sender.login, 'broadbot')" TODO
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
       is-bump: ${{ steps.bump-skip.outputs.is-bump }}
 
     steps:
-      - name: Set part of semantic version to bump
-        id: controls
-        run: |
-          SEMVER_PART=${{ github.event.inputs.bump }}
-          CHECKOUT_BRANCH=${{ github.event.inputs.release_branches }}
-          if ${{github.event_name == 'push' }}; then
-            SEMVER_PART='patch'
-            CHECKOUT_BRANCH="$GITHUB_REF"
-          fi
-          echo semver_part=$SEMVER_PART >> $GITHUB_OUTPUT
-          echo checkout_branch=$CHECKOUT_BRANCH >> $GITHUB_OUTPUT  
-
       - name: Checkout current code
         uses: actions/checkout@v3
         with:
-          ref: ${{ steps.controls.outputs.checkout_branch }}
-          token: ${{ secrets.BROADBOT_TOKEN }} # this allows the push to succeed later
+          ref: $GITHUB_REF
+          token: ${{ secrets.BROADBOT_TOKEN }}
 
       - name: Skip version bump merges
         id: bump-skip
@@ -72,17 +64,27 @@ jobs:
         with:
           event-name: ${{ github.event_name }}
 
+      - name: Set part of semantic version to bump
+        if: steps.bump-skip.outputs.is-bump == 'no'
+        id: semver-check
+        run: |
+          SEMVER_PART=${{ inputs.bump-type }}
+          if ${{github.event_name == 'push' }}; then
+            SEMVER_PART='patch'
+          fi
+          echo semver-part=$SEMVER_PART >> $GITHUB_OUTPUT
+
       - name: Bump the tag to a new version
         if: steps.bump-skip.outputs.is-bump == 'no'
         # https://github.com/DataBiosphere/github-actions/tree/master/actions/bumper
         uses: databiosphere/github-actions/actions/bumper@bumper-0.0.6
         id: tag
         env:
-          DEFAULT_BUMP: ${{ github.event.inputs.bump }}
+          DEFAULT_BUMP: ${{ inputs.bump-type }}
           GITHUB_TOKEN: ${{ secrets.BROADBOT_TOKEN }}
-          HOTFIX_BRANCHES: ${{ github.event.inputs.hotfix_branches }}
-          OVERRIDE_BUMP: ${{ steps.controls.outputs.semver_part }}
-          RELEASE_BRANCHES: ${{ github.event.inputs.release_branches }}
-          VERSION_FILE_PATH: ${{ github.event.inputs.version_file_path }}
-          VERSION_LINE_MATCH: ${{ github.event.inputs.version_line_match }}
-          VERSION_SUFFIX: ${{ github.event.inputs.version_suffix }}
+          HOTFIX_BRANCHES: ${{ inputs.hotfix-branches }}
+          OVERRIDE_BUMP: ${{ steps.semver-check.outputs.semver-part }}
+          RELEASE_BRANCHES: ${{ inputs.release-branches }}
+          VERSION_FILE_PATH: ${{ inputs.version-file-path }}
+          VERSION_LINE_MATCH: ${{ inputs.version-line-match }}
+          VERSION_SUFFIX: ${{ inputs.version-suffix }}
