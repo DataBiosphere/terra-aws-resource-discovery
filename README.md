@@ -2,6 +2,18 @@
 
 Terra AWS Support Resource Discovery Client Library
 
+Table of Contents
+=================
+* [Introduction](#introduction)
+* [Support Resource Organization](#support-resource-organization)
+  * [Environments](#environments)
+  * [Landing Zones](#landing-zones)
+* [Discovery Implementation](#discovery-implementation)
+  * [Support Resource Deployment](#support-resource-deployment)
+  * [Configuration Schemas](#configuration-schemas)
+  * [Schema Evolution and Versioning](#schema-evolution-and-versioning)
+  * [Configuration Storage Layout](#configuration-storage-layout)
+
 # Introduction
 In order for Terra services to manage and provide access to [Controlled Resources](https://github.com/DataBiosphere/terra-workspace-manager#overview) 
 in Amazon Web Services (AWS), there must exist several AWS cloud resources used for this purpose.
