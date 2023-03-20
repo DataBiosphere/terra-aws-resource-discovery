@@ -108,7 +108,7 @@ Three implementations of this interface are provided:
 discovers Support Resources by reading them from an S3 bucket that the caller has access to.
 * Class [`FilesystemEnvironmentDiscovery`](src/main/java/bio/terra/aws/resource/discovery/FilesystemEnvironmentDiscovery.java)
 discovers Support Resources by reading them from directories within an accessible file system path.
-* Class [`S3EnvironmentDiscovery`](src/main/java/bio/terra/aws/resource/discovery/CachedEnvironmentDiscovery.java) 
+* Class [`CachedEnvironmentDiscovery`](src/main/java/bio/terra/aws/resource/discovery/CachedEnvironmentDiscovery.java) 
 is used in conjunction with one of the two above classes to cache discovery results between calls to 
 `discoverEnvironment()`, in order to reduce the number of calls to storage API's.
 
