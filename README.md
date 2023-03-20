@@ -17,9 +17,9 @@ Table of Contents
 # Introduction
 In order for Terra services to manage and provide access to [Controlled Resources](https://github.com/DataBiosphere/terra-workspace-manager#overview) 
 in Amazon Web Services (AWS), there must exist several AWS cloud resources used for this purpose.
-These resources will be referred to **Support Resources**.
+These resources will be referred to as **Support Resources**.
 
-Support regions may be [**Global** or **Regional**](https://docs.aws.amazon.com/ram/latest/userguide/working-with-regional-vs-global.html):
+Support resources may be [**Global** or **Regional**](https://docs.aws.amazon.com/ram/latest/userguide/working-with-regional-vs-global.html):
 * **Global Support Resources** are resources that do not exist in an AWS Region.  These are 
 most commonly (but not limited to) IAM resources ([IAM Roles](https://aws.amazon.com/iam/features/manage-roles/), 
 [IAM Policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#policies_id-based)).
@@ -53,17 +53,20 @@ The following diagram illustrates the relationship between Environments, Regions
 Controlled Resources in AWS:
 ![](AWS%20Workspace%20Landing%20Zone.png)
 
+The area in the dark purple dashed box represents the resources (Shared and Controlled) that make
+up a Terra AWS Landing Zone.
+
 # Discovery Implementation
 ## Support Resource Deployment
 Deployment of Support Resources in an AWS Environment is out of scope for this document.  However,
-producers of these resources are required to provide discovery using the conventions described
-below in order to make them discoverable to Terra Services.
+producers of these resources are required to provide discoverability of their Support Resources by
+using the conventions described below.
 ## Configuration Schemas
 We have chosen to use [Apache Avro](https://avro.apache.org/) for specifying the schema for Support 
 Resource discovery, for several reasons:
 * Strong schema evolution support.
 * Support for many programming languages, supporting both Java service development and
-infrastructure-deployment-side testing/validation.
+infrastructure-deployment-side testing/validation in other languages.
 * Human readable JSON-based Schema IDL and JSON data files.
 
 *This repository ([`terra-aws-resource-discovery`](https://github.com/DataBiosphere/terra-aws-resource-discovery))
