@@ -32,7 +32,6 @@ on:
         description: 'Version suffix'
         type: string
         required: false
-        default: SNAPSHOT
       with-v:
         description: 'Tag version with v character'
         type: boolean
@@ -79,8 +78,7 @@ jobs:
 
       - name: Bump the tag to a new version
         if: steps.bump-skip.outputs.is-bump == 'no'
-        # https://github.com/DataBiosphere/github-actions/tree/master/actions/bumper
-        uses: databiosphere/github-actions/actions/bumper@bumper-0.0.7
+        uses: databiosphere/github-actions/actions/bumper@bumper-0.1.0
         id: tag
         env:
           DEFAULT_BUMP: ${{ inputs.bump-type }}
