@@ -2,7 +2,7 @@ name: Tag, publish
 
 on:
   workflow_dispatch:
-    inputs: #TODO(TERRA-432) determine this automatically
+    inputs:
       bump-type:
         description: 'Type of bump'
         type: choice
