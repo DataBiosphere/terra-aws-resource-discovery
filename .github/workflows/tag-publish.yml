@@ -2,7 +2,7 @@ name: Tag, publish
 
 on:
   workflow_dispatch:
-    inputs: #TODO(TERRA-432) determine this automatically
+    inputs:
       bump-type:
         description: 'Type of bump'
         type: choice
@@ -56,4 +56,4 @@ jobs:
     uses: ./.github/workflows/publish.yml
     secrets: inherit
     with:
-      artifactory_repo_key: 'libs-snapshot-local'
+      artifactory-repo-key: 'libs-snapshot-local'

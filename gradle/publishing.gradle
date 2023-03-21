@@ -1,6 +1,7 @@
 def artifactory_repo_key = System.getenv("ARTIFACTORY_REPO_KEY") != null ? System.getenv("ARTIFACTORY_REPO_KEY") : 'libs-snapshot-local'
 def artifactory_username = System.getenv('ARTIFACTORY_USERNAME')
 def artifactory_password = System.getenv('ARTIFACTORY_PASSWORD')
+def artifactory_releaseVersion = gradle.ext.releaseVersion.toString()
 
 java {
     // Builds sources into the published package as part of the 'assemble' task.
@@ -16,11 +17,16 @@ gradle.taskGraph.whenReady { taskGraph ->
 
 // Publish jar file to a Maven module/artifact using the maven-publish plugin.
 publishing {
+    // Add snapshot suffix to artifactory releases
+    if (!artifactory_releaseVersion.endsWith('-SNAPSHOT')) {
+        artifactory_releaseVersion += '-SNAPSHOT'
+    }
+
     publications {
         terraAwsResourceDiscovery(MavenPublication) {
             groupId = gradle.ext.projectGroup
             artifactId = rootProject.name
-            version = gradle.ext.releaseVersion
+            version = "${artifactory_releaseVersion}"
             from components.java
         }
     }
