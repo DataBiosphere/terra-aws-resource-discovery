@@ -1,9 +1,11 @@
 package bio.terra.aws.resource.discovery;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import software.amazon.awssdk.arns.Arn;
 import software.amazon.awssdk.regions.Region;
 
@@ -101,6 +103,17 @@ public class Environment {
    */
   public Optional<LandingZone> getLandingZone(Region region) {
     return Optional.ofNullable(landingZoneMap.get(region));
+  }
+
+  /**
+   * Returns a {@link Set<Region>} containing all of the AWS Regions supported by an {@link
+   * Environment}. For all regions contained in this set, a call to {@link
+   * Environment#getLandingZone(Region)} should return a non-empty {@link Optional<LandingZone>}.
+   *
+   * @return a set containing all AWS regions supported by the region
+   */
+  public Set<Region> getSupportedRegions() {
+    return new HashSet<>(landingZoneMap.keySet());
   }
 
   @Override

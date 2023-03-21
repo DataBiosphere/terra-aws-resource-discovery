@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import software.amazon.awssdk.arns.Arn;
@@ -109,14 +110,18 @@ public class EnvironmentDiscoveryTestBase {
     Environment environment = environmentDiscovery.discoverEnvironment();
     Assertions.assertEquals(expectedEnvironment, environment);
 
+    Set<Region> regionSet = environment.getSupportedRegions();
+
     for (Region region : Region.regions()) {
       if (region.equals(Region.US_EAST_1) || region.equals(Region.US_WEST_1)) {
+        Assertions.assertTrue(regionSet.contains(region));
         Optional<LandingZone> expectedLandingZone = environment.getLandingZone(region);
         Optional<LandingZone> landingZone = environment.getLandingZone(region);
         Assertions.assertFalse(expectedLandingZone.isEmpty());
         Assertions.assertFalse(landingZone.isEmpty());
         Assertions.assertEquals(expectedLandingZone.get(), landingZone.get());
       } else {
+        Assertions.assertFalse(regionSet.contains(region));
         Assertions.assertTrue(expectedEnvironment.getLandingZone(region).isEmpty());
         Assertions.assertTrue(environment.getLandingZone(region).isEmpty());
       }
