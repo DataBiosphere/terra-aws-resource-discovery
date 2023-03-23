@@ -90,4 +90,11 @@ public class S3EnvironmentDiscoveryTest extends EnvironmentDiscoveryTestBase {
         new S3EnvironmentDiscovery(getNotebookLifecycleMismatchTestDataBucketName(), s3Client);
     notebookLifecycleMismatchTestLogic(discovery);
   }
+
+  @Test
+  public void addFieldBeforeSchemaUpdate() throws IOException {
+    EnvironmentDiscovery discovery =
+        new S3EnvironmentDiscovery(getAddFieldBeforeSchemaUpdateTestDataBucketName(), s3Client);
+    addFieldBeforeSchemaUpdateTestLogic(discovery);
+  }
 }

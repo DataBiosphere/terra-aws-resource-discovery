@@ -165,6 +165,7 @@ public class EnvironmentDiscoveryTestBase {
     Environment environment = environmentDiscovery.discoverEnvironment();
 
     // Global Support Resources should match
+    Assertions.assertEquals(expectedEnvironment.getMetadata(), environment.getMetadata());
     Assertions.assertEquals(
         expectedEnvironment.getNotebookRoleArn(), environment.getNotebookRoleArn());
     Assertions.assertEquals(expectedEnvironment.getUserRoleArn(), environment.getUserRoleArn());
@@ -221,5 +222,22 @@ public class EnvironmentDiscoveryTestBase {
         () -> {
           environmentDiscovery.discoverEnvironment();
         });
+  }
+
+  public String getAddFieldBeforeSchemaUpdateTestDataBucketName() {
+    return "add_field_before_schema_update";
+  }
+
+  public Path getAddFieldBeforeSchemaUpdateTestDataPath() {
+    return basePath.resolve(getAddFieldBeforeSchemaUpdateTestDataBucketName());
+  }
+
+  /**
+   * Same as "No Landing Zones" test logic, but adds a field to the payload that does not yet exist
+   * in the Environment schema. This should be silently ignored by Avro parsing.
+   */
+  public void addFieldBeforeSchemaUpdateTestLogic(EnvironmentDiscovery environmentDiscovery)
+      throws IOException {
+    noLandingZonesTestLogic(environmentDiscovery);
   }
 }
