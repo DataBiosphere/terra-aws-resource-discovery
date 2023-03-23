@@ -1,5 +1,6 @@
 package bio.terra.aws.resource.discovery;
 
+import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import software.amazon.awssdk.arns.Arn;
@@ -22,6 +23,7 @@ public class EnvironmentTest extends EnvironmentDiscoveryTestBase {
     // Deep copy
     Environment.Builder builder =
         Environment.builder()
+            .metadata(environment.getMetadata())
             .notebookRoleArn(environment.getNotebookRoleArn())
             .userRoleArn(environment.getUserRoleArn())
             .workspaceManagerRoleArn(environment.getWorkspaceManagerRoleArn());
@@ -50,16 +52,26 @@ public class EnvironmentTest extends EnvironmentDiscoveryTestBase {
   @Test
   public void inequality() {
     Environment environment = getExpectedEnvironment();
-    Assertions.assertEquals(environment, environment);
 
     // Incompatible types
     String string = "string";
     Assertions.assertNotEquals((Object) environment, (Object) string);
 
+    // Different Metadata
+    checkInequality(
+        environment,
+        Environment.builder()
+            .metadata(new Metadata("junk", Region.AWS_GLOBAL, Map.of()))
+            .notebookRoleArn(environment.getNotebookRoleArn())
+            .userRoleArn(environment.getUserRoleArn())
+            .workspaceManagerRoleArn(environment.getWorkspaceManagerRoleArn())
+            .build());
+
     // Different Notebook Role Arn
     checkInequality(
         environment,
         Environment.builder()
+            .metadata(environment.getMetadata())
             .notebookRoleArn(junkArn())
             .userRoleArn(environment.getUserRoleArn())
             .workspaceManagerRoleArn(environment.getWorkspaceManagerRoleArn())
@@ -69,6 +81,7 @@ public class EnvironmentTest extends EnvironmentDiscoveryTestBase {
     checkInequality(
         environment,
         Environment.builder()
+            .metadata(environment.getMetadata())
             .notebookRoleArn(environment.getNotebookRoleArn())
             .userRoleArn(junkArn())
             .workspaceManagerRoleArn(environment.getWorkspaceManagerRoleArn())
@@ -78,6 +91,7 @@ public class EnvironmentTest extends EnvironmentDiscoveryTestBase {
     checkInequality(
         environment,
         Environment.builder()
+            .metadata(environment.getMetadata())
             .notebookRoleArn(environment.getNotebookRoleArn())
             .userRoleArn(environment.getUserRoleArn())
             .workspaceManagerRoleArn(junkArn())
@@ -87,6 +101,7 @@ public class EnvironmentTest extends EnvironmentDiscoveryTestBase {
     checkInequality(
         environment,
         Environment.builder()
+            .metadata(environment.getMetadata())
             .notebookRoleArn(environment.getNotebookRoleArn())
             .userRoleArn(environment.getUserRoleArn())
             .workspaceManagerRoleArn(environment.getWorkspaceManagerRoleArn())

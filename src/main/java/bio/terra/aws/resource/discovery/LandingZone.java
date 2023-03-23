@@ -9,11 +9,15 @@ import software.amazon.awssdk.utils.Validate;
 
 /** Represents all the Regional Support Resources in a Terra AWS Landing Zone. */
 public class LandingZone {
+  private final Metadata metadata;
   private final StorageBucket storageBucket;
   private final KmsKey kmsKey;
   private final List<NotebookLifecycleConfiguration> notebookLifecycleConfigurations;
 
   private LandingZone(Builder builder) {
+    Validate.notNull(builder.metadata, "Metadata may not be null.");
+    this.metadata = builder.metadata;
+
     Validate.notNull(builder.storageBucket, "Storage bucket may not be null");
     storageBucket = builder.storageBucket;
 
@@ -33,12 +37,19 @@ public class LandingZone {
 
   /** Builder for class @{link LandingZone} */
   public static class Builder {
+    private Metadata metadata;
     private StorageBucket storageBucket;
     private KmsKey kmsKey;
     private List<NotebookLifecycleConfiguration> notebookLifecycleConfigurations;
 
     private Builder() {
       notebookLifecycleConfigurations = new ArrayList<>();
+    }
+
+    /** Set the metadata describing the LandingZone */
+    Builder metadata(Metadata metadata) {
+      this.metadata = metadata;
+      return this;
     }
 
     /** Set the Landing Zone's AWS S3 Storage Bucket's ARN and Name */
@@ -63,6 +74,10 @@ public class LandingZone {
     LandingZone build() {
       return new LandingZone(this);
     }
+  }
+  /** Get the {@link Metadata} describing the {@link Environment} */
+  public Metadata getMetadata() {
+    return metadata;
   }
 
   /** Gets the Landing Zone's AWS S3 Storage Bucket */
@@ -90,13 +105,15 @@ public class LandingZone {
     if (this == o) return true;
     if (!(o instanceof LandingZone)) return false;
     LandingZone that = (LandingZone) o;
-    return Objects.equals(storageBucket, that.storageBucket)
+    return Objects.equals(metadata, that.metadata)
+        && Objects.equals(storageBucket, that.storageBucket)
         && kmsKey.equals(that.kmsKey)
         && notebookLifecycleConfigurations.equals(that.notebookLifecycleConfigurations);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(storageBucket, kmsKey, notebookLifecycleConfigurations.hashCode());
+    return Objects.hash(
+        metadata, storageBucket, kmsKey, notebookLifecycleConfigurations.hashCode());
   }
 }

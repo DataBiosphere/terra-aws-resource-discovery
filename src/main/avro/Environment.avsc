@@ -4,6 +4,32 @@
   "namespace": "bio.terra.aws.resource.discovery.avro",
   "fields": [
     {
+      "name": "metadata",
+      "type": {
+        "name": "EnvironmentMetadataModel",
+        "type": "record",
+        "fields":
+        [
+          {
+            "name": "account_id",
+            "type": "string"
+          },
+          {
+            "name": "region",
+            "type": "string"
+          },
+          {
+            "name": "tags",
+            "type":
+              {
+                "type": "map",
+                "values": "string"
+              }
+          }
+        ]
+      }
+    },
+    {
       "name": "role_arn_terra_notebook",
       "type": "string"
     },

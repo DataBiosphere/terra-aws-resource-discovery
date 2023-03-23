@@ -1,5 +1,6 @@
 package bio.terra.aws.resource.discovery;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
@@ -26,11 +27,13 @@ public class LandingZoneTest extends EnvironmentDiscoveryTestBase {
     Assertions.assertEquals(landingZone, landingZone);
 
     // Deep copy
+    Metadata metadata = landingZone.getMetadata();
     KmsKey kmsKey = landingZone.getKmsKey();
     StorageBucket storageBucket = landingZone.getStorageBucket();
 
     LandingZone.Builder builder =
         LandingZone.builder()
+            .metadata(new Metadata(metadata.accountId(), metadata.region(), metadata.tagMap()))
             .storageBucket(storageBucket.arn(), storageBucket.name())
             .kmsKey(kmsKey.arn(), kmsKey.id());
 
@@ -64,10 +67,20 @@ public class LandingZoneTest extends EnvironmentDiscoveryTestBase {
     KmsKey kmsKey = landingZone.getKmsKey();
     StorageBucket storageBucket = landingZone.getStorageBucket();
 
+    // Different Metadata
+    checkInequality(
+        landingZone,
+        LandingZone.builder()
+            .metadata(new Metadata("junk", Region.AWS_GLOBAL, Map.of()))
+            .storageBucket(storageBucket.arn(), storageBucket.name())
+            .kmsKey(kmsKey.arn(), kmsKey.id())
+            .build());
+
     // Different Notebook Role Arn
     checkInequality(
         landingZone,
         LandingZone.builder()
+            .metadata(landingZone.getMetadata())
             .storageBucket(junkArn(), "")
             .kmsKey(kmsKey.arn(), kmsKey.id())
             .build());
@@ -76,6 +89,7 @@ public class LandingZoneTest extends EnvironmentDiscoveryTestBase {
     checkInequality(
         landingZone,
         LandingZone.builder()
+            .metadata(landingZone.getMetadata())
             .storageBucket(storageBucket.arn(), storageBucket.name())
             .kmsKey(junkArn(), UUID.randomUUID())
             .build());
@@ -84,6 +98,7 @@ public class LandingZoneTest extends EnvironmentDiscoveryTestBase {
     checkInequality(
         landingZone,
         LandingZone.builder()
+            .metadata(landingZone.getMetadata())
             .storageBucket(storageBucket.arn(), storageBucket.name())
             .kmsKey(kmsKey.arn(), kmsKey.id())
             .build());

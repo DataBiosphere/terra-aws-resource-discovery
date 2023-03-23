@@ -20,6 +20,32 @@
       "type": "string"
     },
     {
+      "name": "metadata",
+      "type": {
+        "name": "LandingZoneMetadataModel",
+        "type": "record",
+        "fields":
+        [
+          {
+            "name": "account_id",
+            "type": "string"
+          },
+          {
+            "name": "region",
+            "type": "string"
+          },
+          {
+            "name": "tags",
+            "type":
+            {
+              "type": "map",
+              "values": "string"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "notebook_lifecycle_configuration_arns",
       "type": {
         "type": "array",
