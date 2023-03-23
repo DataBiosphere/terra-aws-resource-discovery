@@ -1,0 +1,28 @@
+name: Create a new release
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: 'Tag'
+        type: string
+        required: true
+
+jobs:
+  release-job:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout current code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.BROADBOT_TOKEN }}
+
+      - name: Create a release
+        id: create-release
+        run: ./tools/create-release.sh ${{ inputs.tag }} true
+        env:
+          GITHUB_TOKEN: ${{ secrets.BROADBOT_TOKEN }}

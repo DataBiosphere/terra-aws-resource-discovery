@@ -1,0 +1,66 @@
+name: Generate a new Alias Tags
+
+on:
+  workflow_call:
+    inputs:
+      semverTag:
+        description: 'Existing github tag in semver format'
+        type: string
+        required: true
+
+    outputs:
+      minor-version-alias:
+        description: 'Tag alias for minor version'
+        value: ${{ jobs.alias-tags-job.outputs.minor-version-alias }}
+      major-version-alias:
+        description: 'Tag alias for major version'
+        value: ${{ jobs.alias-tags-job.outputs.major-version-alias }}
+
+
+jobs:
+  alias-tags-job:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    outputs:
+      minor-version-alias: ${{ steps.extract-tags.outputs.minor-version-alias }}
+      major-version-alias: ${{ steps.extract-tags.outputs.major-version-alias }}
+
+    steps:
+      - name: Checkout current code
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.BROADBOT_TOKEN }}
+
+      - name: Fetch latest tags
+        id: fetch-tags
+        run: |
+          git pull
+          if [[ -z $(git tag -l {{ inputs.semverTag }}) ]]; then
+            >&2 echo "ERROR: No existing tag found matching {{ inputs.semverTag }}"
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.BROADBOT_TOKEN }}
+
+      - name: Checkout semverTag
+        id: checkout-semverTag
+        run: git checkout tags/{{ inputs.semverTag }} > /dev/null 2>&1
+
+      - name: Extract alias tags
+        id: extract-tags
+        run: |
+          SEMVER_TAG=${{ inputs.semverTag }}
+          MINOR_ALIAS=${SEMVER_TAG%.*}
+          MAJOR_ALIAS=${MINOR_ALIAS%.*}
+          echo minor-version-alias=$MINOR_ALIAS >> $GITHUB_OUTPUT
+          echo major-version-alias=$MAJOR_ALIAS >> $GITHUB_OUTPUT
+
+      - name: Generate new tags
+        id: generate-tags
+        run: |
+          git tag -f ${{ steps.extract-tags.outputs.minor-version-alias }}
+          git tag -f ${{ steps.extract-tags.outputs.major-version-alias }}
+          git push --tags

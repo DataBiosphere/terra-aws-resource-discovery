@@ -26,29 +26,12 @@ jobs:
 
   release:
     needs: [ tag ]
-    runs-on: ubuntu-latest
     if: ${{ needs.tag.outputs.tag }} != ""
-    defaults:
-      run:
-        shell: bash
-
-    steps:
-      - name: Checkout current code
-        uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.BROADBOT_TOKEN }}
-
-      - name: Fetch latest tags
-        id: git-pull
-        run: git pull
-        env:
-          GITHUB_TOKEN: ${{ secrets.BROADBOT_TOKEN }}
-
-      - name: Create a release
-        id: create-release
-        run: ./tools/create-release.sh ${{ needs.tag.outputs.tag }} true
-        env:
-          GITHUB_TOKEN: ${{ secrets.BROADBOT_TOKEN }}
+    uses: ./.github/workflows/release.yml
+    secrets: inherit
+    with:
+      tag: ${{ needs.tag.outputs.tag }}
+      overwrite: true
 
   publish:
     needs: [ tag ]
@@ -57,3 +40,27 @@ jobs:
     secrets: inherit
     with:
       artifactory-repo-key: 'libs-snapshot-local'
+
+  alias-tags:
+    needs: [ tag ]
+    if: ${{ needs.tag.outputs.tag }} != ""
+    uses: ./.github/workflows/alias-tags.yml
+    secrets: inherit
+    with:
+      semverTag: ${{ needs.tag.outputs.tag }}
+
+  alias-release-minor:
+    needs: [ alias-tags ]
+    if: ${{ needs.alias-tags.outputs.minor-version-alias }} != ""
+    uses: ./.github/workflows/release.yml
+    secrets: inherit
+    with:
+      tag: ${{ needs.alias-tags.outputs.minor-version-alias }}
+
+  alias-release-major:
+    needs: [ alias-tags ]
+    if: ${{ needs.alias-tags.outputs.major-version-alias }} != ""
+    uses: ./.github/workflows/release.yml
+    secrets: inherit
+    with:
+      tag: ${{ needs.alias-tags.outputs.major-version-alias }}
