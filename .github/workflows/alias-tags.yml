@@ -47,7 +47,7 @@ jobs:
 
       - name: Checkout semverTag
         id: checkout-semverTag
-        run: git checkout tags/{{ inputs.semverTag }} > /dev/null 2>&1
+        run: git checkout {{ inputs.semverTag }} > /dev/null 2>&1
 
       - name: Extract alias tags
         id: extract-tags
@@ -57,6 +57,12 @@ jobs:
           MAJOR_ALIAS=${MINOR_ALIAS%.*}
           echo minor-version-alias=$MINOR_ALIAS >> $GITHUB_OUTPUT
           echo major-version-alias=$MAJOR_ALIAS >> $GITHUB_OUTPUT
+
+      - name: Cleanup existing releases for alias-tags
+        id: cleanup-releases
+        run: |
+          gh release delete ${{ steps.extract-tags.outputs.minor-version-alias }}
+          gh release delete ${{ steps.extract-tags.outputs.major-version-alias }}
 
       - name: Generate new tags
         id: generate-tags
