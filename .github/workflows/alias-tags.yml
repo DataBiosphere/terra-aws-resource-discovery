@@ -47,7 +47,7 @@ jobs:
 
       - name: Checkout semverTag
         id: checkout-semverTag
-        run: git checkout {{ inputs.semverTag }} > /dev/null 2>&1
+        run: git checkout ${{ inputs.semverTag }} > /dev/null 2>&1
 
       - name: Extract alias tags
         id: extract-tags
