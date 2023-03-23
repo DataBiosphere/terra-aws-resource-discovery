@@ -1,3 +1,4 @@
+import com.github.davidmc24.gradle.plugin.avro.GenerateAvroJavaTask
 
 plugins {
     id 'idea'
@@ -15,6 +16,7 @@ plugins {
 // If true, search local repository (~/.m2/repository/) first for dependencies.
 def useMavenLocal = false
 repositories {
+    gradlePluginPortal()
     if (useMavenLocal) {
         mavenLocal() // must be listed first to take effect
     }
@@ -50,3 +52,10 @@ apply from: "$gradleIncDir/publishing.gradle"
 apply from: "$gradleIncDir/spotbugs.gradle"
 apply from: "$gradleIncDir/spotless.gradle"
 apply from: "$gradleIncDir/testing.gradle"
+
+generateAvroJava {
+    source("src/main/avro/Metadata.avsc")
+    source("src/main/avro/Environment.avsc")
+    source("src/main/avro/LandingZone.avsc")
+    outputDir = file("${buildDir}/avro")
+}

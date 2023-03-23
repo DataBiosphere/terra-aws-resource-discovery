@@ -9,6 +9,7 @@ dependencies {
     }
 
     // Used internally, and not exposed to consumers on their own compile classpath.
+    implementation group: 'org.apache.avro', name: 'avro', version: "${avro}"
     implementation group: 'org.apache.avro', name: 'avro-compiler', version: "${avro}"
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: "${junitJupiter}"

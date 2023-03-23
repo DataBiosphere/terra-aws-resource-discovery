@@ -4,6 +4,10 @@
   "namespace": "bio.terra.aws.resource.discovery.avro",
   "fields": [
     {
+      "name": "metadata",
+      "type": "bio.terra.aws.resource.discovery.avro.MetadataModel"
+    },
+    {
       "name": "bucket_arn",
       "type": "string"
     },
@@ -18,32 +22,6 @@
     {
       "name": "kms_key_id",
       "type": "string"
-    },
-    {
-      "name": "metadata",
-      "type": {
-        "name": "LandingZoneMetadataModel",
-        "type": "record",
-        "fields":
-        [
-          {
-            "name": "account_id",
-            "type": "string"
-          },
-          {
-            "name": "region",
-            "type": "string"
-          },
-          {
-            "name": "tags",
-            "type":
-            {
-              "type": "map",
-              "values": "string"
-            }
-          }
-        ]
-      }
     },
     {
       "name": "notebook_lifecycle_configuration_arns",

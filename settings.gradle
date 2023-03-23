@@ -1,3 +1,11 @@
+/*pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+*/
+
 rootProject.name = 'terra-aws-resource-discovery'
 
 gradle.ext.projectGroup='bio.terra'
