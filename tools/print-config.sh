@@ -16,7 +16,7 @@ if [[ ! -f "$2" ]]; then
   exit 3
 fi
 
-jq -n \
+jq -n -M \
   --arg schema "$(cat "$1" | base64)" \
   --arg payload "$(cat "$2" | base64)" \
   '{schema: $schema, payload: $payload}'
