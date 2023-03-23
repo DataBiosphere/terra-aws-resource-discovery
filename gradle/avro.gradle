@@ -1,4 +1,4 @@
-def avroOutputDir = "${buildDir}/generated/sources"
+def avroOutputDir = "${buildDir}/generated/avro"
 
 generateAvroJava {
     source("src/main/avro/Metadata.avsc")
@@ -7,8 +7,5 @@ generateAvroJava {
     outputDir = file(avroOutputDir)
 }
 
-sourceSets {
-    main {
-        java.srcDirs += avroOutputDir
-    }
-}
+sourceSets.main.java.srcDirs += avroOutputDir
+tasks.compileJava.dependsOn(generateAvroJava)

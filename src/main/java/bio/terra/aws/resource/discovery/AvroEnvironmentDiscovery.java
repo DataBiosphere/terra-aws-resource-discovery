@@ -1,7 +1,11 @@
 package bio.terra.aws.resource.discovery;
 
-import bio.terra.aws.resource.discovery.avro.*;
+import bio.terra.aws.resource.discovery.avro.EnvironmentModel;
+import bio.terra.aws.resource.discovery.avro.LandingZoneModel;
+import bio.terra.aws.resource.discovery.avro.MetadataModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.*;
 import org.apache.avro.Schema;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.Decoder;
@@ -9,9 +13,6 @@ import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.specific.SpecificDatumReader;
 import software.amazon.awssdk.arns.Arn;
 import software.amazon.awssdk.regions.Region;
-
-import java.io.IOException;
-import java.util.*;
 
 /**
  * Abstract class used to discover AWS Support Resources in a single Terra AWS Environment and its
@@ -78,7 +79,6 @@ abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
     AvroConfiguration environmentConfiguration = getEnvironmentConfiguration(mapper);
 
     // Parse the Avro configuration record into generated deserialization object model Java class.
-
     EnvironmentModel environmentModel =
         parseModel(environmentConfiguration, EnvironmentModel.getClassSchema());
 

@@ -1,8 +1,14 @@
 java {
     // Builds Javadoc into the published package as part of the 'assemble' task.
     withJavadocJar()
+    withSourcesJar()
 }
 
 tasks.withType(Javadoc) {
     options.addStringOption('Xdoclint:none', '-quiet')
+}
+
+sourcesJar {
+    duplicatesStrategy = 'exclude'
+    from sourceSets.main.allSource
 }

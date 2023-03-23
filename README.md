@@ -15,7 +15,7 @@ Table of Contents
   * [Configuration Storage Layout](#configuration-storage-layout)
 * [Library Development Notes](#library-development-notes)
   * [Static Test Data](#static-test-data)
-    * [Updating an Existing TEst Case Config File](#updating-an-existing-test-case-config-file) 
+    * [Updating an Existing Test Case Config File](#updating-an-existing-test-case-config-file) 
     * [Writing a New Test Case Config File](#writing-a-new-test-case-config-file)
 
 # Introduction
