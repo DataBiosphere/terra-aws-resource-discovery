@@ -19,12 +19,13 @@ if [[ $(basename "$PWD") != 'terra-aws-resource-discovery' ]]; then
 fi
 
 releaseTag=$1
-isRegularRelease=$2
-
 if [[ -z "$releaseTag" ]]; then
-    >&2 echo "ERROR: Usage: tools/publish-release.sh [releaseTag] [isRegularRelease]"
+    >&2 echo "ERROR: Usage: tools/create-release.sh [releaseTag] [isRegularRelease]"
     exit 1
 fi
+
+echo "-- Fetching latest tags"
+git pull
 
 echo "-- Checking if there is a tag that matches provided releaseTag"
 if [[ -z $(git tag -l "$releaseTag") ]]; then
@@ -35,6 +36,7 @@ else
 fi
 
 echo "-- Creating a new GitHub release with the avro schema files"
+isRegularRelease=$2
 if [[ "$isRegularRelease" == "true" ]]; then
   echo "Creating regular release"
   preReleaseFlag=""
