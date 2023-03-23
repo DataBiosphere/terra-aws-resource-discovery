@@ -16,7 +16,18 @@ if [[ ! -f "$2" ]]; then
   exit 3
 fi
 
+BASE64_EXE="$(which base64)"
+
+# Handle differences in OSX and GNU base64 implementations
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # Mac OSX
+  BASE64_ENCODE_COMMAND="$BASE64_EXE --input"
+else
+  # GNU/Linux
+  BASE64_ENCODE_COMMAND="$BASE64_EXE --wrap=0"
+fi
+
 jq -n -M \
-  --arg schema "$(cat "$1" | base64)" \
-  --arg payload "$(cat "$2" | base64)" \
+  --arg schema "$($BASE64_ENCODE_COMMAND "$1")" \
+  --arg payload "$($BASE64_ENCODE_COMMAND "$2")" \
   '{schema: $schema, payload: $payload}'

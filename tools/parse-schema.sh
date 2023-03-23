@@ -6,4 +6,4 @@ if [ "$#" -ne 1 ]; then
   exit 1
 fi
 
-cat $1 | jq -r '.schema' | base64 -d
+jq -r '.schema' "$1" | base64 --decode
