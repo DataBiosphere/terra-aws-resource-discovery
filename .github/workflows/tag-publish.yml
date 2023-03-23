@@ -55,6 +55,7 @@ jobs:
     secrets: inherit
     with:
       tag: ${{ needs.alias-tags.outputs.minor-version-alias }}
+      regular-release: false
 
   alias-release-major:
     needs: [ alias-tags ]
@@ -63,3 +64,4 @@ jobs:
     secrets: inherit
     with:
       tag: ${{ needs.alias-tags.outputs.major-version-alias }}
+      regular-release: false
