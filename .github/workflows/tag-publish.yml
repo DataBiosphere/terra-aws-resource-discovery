@@ -31,7 +31,6 @@ jobs:
     secrets: inherit
     with:
       tag: ${{ needs.tag.outputs.tag }}
-      overwrite: true
 
   publish:
     needs: [ tag ]
