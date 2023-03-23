@@ -53,6 +53,12 @@ do
 done
 
 gh config set prompt disabled
+
+if ! gh release view "$releaseTag" > /dev/null 2>&1; then
+  echo "Deleting existing release $releaseTag"
+  gh release delete "$releaseTag"
+fi
+
 gh release create "$releaseTag" $preReleaseFlag \
   --title "$releaseTag" \
   "${schemaFilesList[@]}"
