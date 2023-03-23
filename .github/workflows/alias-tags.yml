@@ -60,8 +60,8 @@ jobs:
       - name: Cleanup existing releases for alias-tags
         id: cleanup-releases
         run: |
-          gh release delete ${{ steps.extract-tags.outputs.minor-version-alias }}
-          gh release delete ${{ steps.extract-tags.outputs.major-version-alias }}
+          gh release delete ${{ steps.extract-tags.outputs.minor-version-alias }} || true
+          gh release delete ${{ steps.extract-tags.outputs.major-version-alias }} || true
         env:
           GH_TOKEN: ${{ secrets.BROADBOT_TOKEN }}
 
