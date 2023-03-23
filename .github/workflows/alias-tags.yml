@@ -38,8 +38,8 @@ jobs:
         id: fetch-tags
         run: |
           git pull
-          if [[ -z $(git tag -l {{ inputs.semverTag }}) ]]; then
-            >&2 echo "ERROR: No existing tag found matching {{ inputs.semverTag }}"
+          if [[ -z $(git tag -l ${{ inputs.semverTag }}) ]]; then
+            >&2 echo "ERROR: No existing tag found matching ${{ inputs.semverTag }}"
             exit 1
           fi
         env:
