@@ -44,6 +44,7 @@ if (hasProperty('buildScan')) {
 }
 
 def gradleIncDir= "$rootDir/gradle"
+apply(from: "$gradleIncDir/avro.gradle")
 apply(from: "$gradleIncDir/dependencies.gradle")
 apply from: "$gradleIncDir/dependency-locking.gradle"
 apply from: "$gradleIncDir/jacoco.gradle"
@@ -53,9 +54,3 @@ apply from: "$gradleIncDir/spotbugs.gradle"
 apply from: "$gradleIncDir/spotless.gradle"
 apply from: "$gradleIncDir/testing.gradle"
 
-generateAvroJava {
-    source("src/main/avro/Metadata.avsc")
-    source("src/main/avro/Environment.avsc")
-    source("src/main/avro/LandingZone.avsc")
-    outputDir = file("${buildDir}/avro")
-}

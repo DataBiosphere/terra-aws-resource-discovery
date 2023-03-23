@@ -1,16 +1,7 @@
 package bio.terra.aws.resource.discovery;
 
-import bio.terra.aws.resource.discovery.avro.EnvironmentMetadataModel;
-import bio.terra.aws.resource.discovery.avro.EnvironmentModel;
-import bio.terra.aws.resource.discovery.avro.LandingZoneMetadataModel;
-import bio.terra.aws.resource.discovery.avro.LandingZoneModel;
+import bio.terra.aws.resource.discovery.avro.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 import org.apache.avro.Schema;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.Decoder;
@@ -18,6 +9,9 @@ import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.specific.SpecificDatumReader;
 import software.amazon.awssdk.arns.Arn;
 import software.amazon.awssdk.regions.Region;
+
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Abstract class used to discover AWS Support Resources in a single Terra AWS Environment and its
@@ -185,7 +179,7 @@ abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
 
   /** Private helper to create a {@link Metadata} from an Avro {@link EnvironmentModel} */
   private Metadata createMetadataFromEnvironmentModel(EnvironmentModel environmentModel) {
-    EnvironmentMetadataModel metadataModel = environmentModel.getMetadata();
+    MetadataModel metadataModel = environmentModel.getMetadata();
     return new Metadata(
         metadataModel.getAccountId(),
         Region.of(metadataModel.getRegion()),
@@ -194,7 +188,7 @@ abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
 
   /** Private helper to create a {@link Metadata} from an Avro {@link LandingZoneModel} */
   private Metadata createMetadataFromELandingZoneModel(LandingZoneModel landingZoneModel) {
-    LandingZoneMetadataModel metadataModel = landingZoneModel.getMetadata();
+    MetadataModel metadataModel = landingZoneModel.getMetadata();
     return new Metadata(
         metadataModel.getAccountId(),
         Region.of(metadataModel.getRegion()),

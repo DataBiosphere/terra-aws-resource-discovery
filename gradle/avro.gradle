@@ -1,0 +1,14 @@
+def avroOutputDir = "${buildDir}/generated/sources"
+
+generateAvroJava {
+    source("src/main/avro/Metadata.avsc")
+    source("src/main/avro/Environment.avsc")
+    source("src/main/avro/LandingZone.avsc")
+    outputDir = file(avroOutputDir)
+}
+
+sourceSets {
+    main {
+        java.srcDirs += avroOutputDir
+    }
+}
