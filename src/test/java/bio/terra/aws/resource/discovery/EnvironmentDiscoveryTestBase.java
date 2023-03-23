@@ -13,6 +13,11 @@ import org.junit.jupiter.api.Assertions;
 import software.amazon.awssdk.arns.Arn;
 import software.amazon.awssdk.regions.Region;
 
+/**
+ * Please see the "Static Test Data" section of this repo's <a
+ * href="https://github.com/DataBiosphere/terra-aws-resource-discovery/blob/main/README.md##static-test-data">README
+ * file</a> for info on test files used in this class.
+ */
 public class EnvironmentDiscoveryTestBase {
 
   private static final String TEST_DATA_RESOURCE_PATH = "test_discovery_data";
