@@ -12,9 +12,9 @@ on:
           - major
         default: patch
 
-  push:
-    branches: [ main ]
-    paths-ignore: [ '**.md' ]
+  #push:
+    #branches: [ main ]
+    #paths-ignore: [ '**.md' ]
 
 jobs:
   tag:
