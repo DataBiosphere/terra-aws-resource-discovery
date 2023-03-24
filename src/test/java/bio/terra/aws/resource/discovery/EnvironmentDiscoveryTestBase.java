@@ -21,8 +21,11 @@ import software.amazon.awssdk.regions.Region;
 public class EnvironmentDiscoveryTestBase {
 
   private static final String TEST_DATA_RESOURCE_PATH = "test_discovery_data";
-
+  private static final String METADATA_TENANT_ALIAS = "terra-saas";
+  private static final String METADATA_ORG_ID = "222222222222";
+  private static final String METADATA_ENVIRONMENT_ALIAS = "devel";
   private static final String METADATA_ACCOUNT_ID = "111111111111";
+  private static String METADATA_MAJOR_VERSION = "v0";
   private static final Map<String, String> METADATA_TAGS = Map.of("Version", "v0");
 
   private static final String NOTEBOOK_ROLE_ARN =
@@ -51,6 +54,18 @@ public class EnvironmentDiscoveryTestBase {
   private static final String US_WEST_NOTEBOOK_LIFECYCLE_NAME =
       "develwestTerraNotebookLifecycleConfigV1";
 
+  private Metadata buildMetatdata(Region region) {
+    return Metadata.builder()
+        .tenantAlias(METADATA_TENANT_ALIAS)
+        .organizationId(METADATA_ORG_ID)
+        .environmentAlias(METADATA_ENVIRONMENT_ALIAS)
+        .accountId(METADATA_ACCOUNT_ID)
+        .region(region)
+        .majorVersion(METADATA_MAJOR_VERSION)
+        .tagMap(METADATA_TAGS)
+        .build();
+  }
+
   private final Path basePath;
   private final Environment expectedEnvironment;
 
@@ -64,14 +79,14 @@ public class EnvironmentDiscoveryTestBase {
 
     expectedEnvironment =
         Environment.builder()
-            .metadata(new Metadata(METADATA_ACCOUNT_ID, Region.US_EAST_1, METADATA_TAGS))
+            .metadata(buildMetatdata(Region.US_EAST_1))
             .notebookRoleArn(Arn.fromString(NOTEBOOK_ROLE_ARN))
             .workspaceManagerRoleArn(Arn.fromString(WSM_ROLE_ARN))
             .userRoleArn(Arn.fromString(USER_ROLE_ARN))
             .addLandingZone(
                 Region.US_EAST_1,
                 LandingZone.builder()
-                    .metadata(new Metadata(METADATA_ACCOUNT_ID, Region.US_EAST_1, METADATA_TAGS))
+                    .metadata(buildMetatdata(Region.US_EAST_1))
                     .storageBucket(Arn.fromString(US_EAST_BUCKET_ARN), US_EAST_BUCKET_NAME)
                     .kmsKey(
                         Arn.fromString(US_EAST_KMS_KEY_ARN), UUID.fromString(US_EAST_KMS_KEY_ID))
@@ -82,7 +97,7 @@ public class EnvironmentDiscoveryTestBase {
             .addLandingZone(
                 Region.US_WEST_1,
                 LandingZone.builder()
-                    .metadata(new Metadata(METADATA_ACCOUNT_ID, Region.US_WEST_1, METADATA_TAGS))
+                    .metadata(buildMetatdata(Region.US_WEST_1))
                     .storageBucket(Arn.fromString(US_WEST_BUCKET_ARN), US_WEST_BUCKET_NAME)
                     .kmsKey(
                         Arn.fromString(US_WEST_KMS_KEY_ARN), UUID.fromString(US_WEST_KMS_KEY_ID))

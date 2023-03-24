@@ -186,18 +186,28 @@ abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
   /** Private helper to create a {@link Metadata} from an Avro {@link EnvironmentModel} */
   private Metadata createMetadataFromEnvironmentModel(EnvironmentModel environmentModel) {
     EnvironmentMetadataModel metadataModel = environmentModel.getMetadata();
-    return new Metadata(
-        metadataModel.getAccountId(),
-        Region.of(metadataModel.getRegion()),
-        metadataModel.getTags());
+    return Metadata.builder()
+        .tenantAlias(metadataModel.getTenantAlias())
+        .organizationId(metadataModel.getOrganizationId())
+        .environmentAlias(metadataModel.getEnvironmentAlias())
+        .accountId(metadataModel.getAccountId())
+        .region(Region.of(metadataModel.getRegion()))
+        .majorVersion(metadataModel.getMajorVersion())
+        .tagMap(metadataModel.getTags())
+        .build();
   }
 
   /** Private helper to create a {@link Metadata} from an Avro {@link LandingZoneModel} */
   private Metadata createMetadataFromELandingZoneModel(LandingZoneModel landingZoneModel) {
     LandingZoneMetadataModel metadataModel = landingZoneModel.getMetadata();
-    return new Metadata(
-        metadataModel.getAccountId(),
-        Region.of(metadataModel.getRegion()),
-        metadataModel.getTags());
+    return Metadata.builder()
+        .tenantAlias(metadataModel.getTenantAlias())
+        .organizationId(metadataModel.getOrganizationId())
+        .environmentAlias(metadataModel.getEnvironmentAlias())
+        .accountId(metadataModel.getAccountId())
+        .region(Region.of(metadataModel.getRegion()))
+        .majorVersion(metadataModel.getMajorVersion())
+        .tagMap(metadataModel.getTags())
+        .build();
   }
 }
