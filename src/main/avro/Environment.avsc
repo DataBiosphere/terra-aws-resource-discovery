@@ -5,45 +5,7 @@
   "fields": [
     {
       "name": "metadata",
-      "type": {
-        "name": "EnvironmentMetadataModel",
-        "type": "record",
-        "fields":
-        [
-          {
-            "name": "tenant_alias",
-            "type": "string"
-          },
-          {
-            "name": "organization_id",
-            "type": "string"
-          },
-          {
-            "name": "environment_alias",
-            "type": "string"
-          },
-          {
-            "name": "account_id",
-            "type": "string"
-          },
-          {
-            "name": "region",
-            "type": "string"
-          },
-          {
-            "name": "major_version",
-            "type": "string"
-          },
-          {
-            "name": "tags",
-            "type":
-              {
-                "type": "map",
-                "values": "string"
-              }
-          }
-        ]
-      }
+      "type": "bio.terra.aws.resource.discovery.avro.MetadataModel"
     },
     {
       "name": "role_arn_terra_notebook",
