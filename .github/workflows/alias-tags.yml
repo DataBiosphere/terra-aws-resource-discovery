@@ -70,6 +70,6 @@ jobs:
         run: |
           git tag -f ${{ steps.extract-tags.outputs.minor-version-alias }}
           git tag -f ${{ steps.extract-tags.outputs.major-version-alias }}
-          git push --tags
+          git push -f --tags
         env:
           GITHUB_TOKEN: ${{ secrets.BROADBOT_TOKEN }}
