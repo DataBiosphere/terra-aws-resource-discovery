@@ -1,6 +1,5 @@
 package bio.terra.aws.resource.discovery;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
@@ -33,7 +32,7 @@ public class LandingZoneTest extends EnvironmentDiscoveryTestBase {
 
     LandingZone.Builder builder =
         LandingZone.builder()
-            .metadata(new Metadata(metadata.accountId(), metadata.region(), metadata.tagMap()))
+            .metadata(new Metadata(metadata))
             .storageBucket(storageBucket.arn(), storageBucket.name())
             .kmsKey(kmsKey.arn(), kmsKey.id());
 
@@ -71,7 +70,9 @@ public class LandingZoneTest extends EnvironmentDiscoveryTestBase {
     checkInequality(
         landingZone,
         LandingZone.builder()
-            .metadata(new Metadata("junk", Region.AWS_GLOBAL, Map.of()))
+            // Create a junk metadata
+            .metadata(
+                new Metadata(landingZone.getMetadata().toBuilder().majorVersion("junk").build()))
             .storageBucket(storageBucket.arn(), storageBucket.name())
             .kmsKey(kmsKey.arn(), kmsKey.id())
             .build());

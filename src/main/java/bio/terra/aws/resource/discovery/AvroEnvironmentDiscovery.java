@@ -5,7 +5,11 @@ import bio.terra.aws.resource.discovery.avro.LandingZoneModel;
 import bio.terra.aws.resource.discovery.avro.MetadataModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.util.*;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import org.apache.avro.Schema;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.Decoder;
@@ -180,18 +184,28 @@ abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
   /** Private helper to create a {@link Metadata} from an Avro {@link EnvironmentModel} */
   private Metadata createMetadataFromEnvironmentModel(EnvironmentModel environmentModel) {
     MetadataModel metadataModel = environmentModel.getMetadata();
-    return new Metadata(
-        metadataModel.getAccountId(),
-        Region.of(metadataModel.getRegion()),
-        metadataModel.getTags());
+    return Metadata.builder()
+        .tenantAlias(metadataModel.getTenantAlias())
+        .organizationId(metadataModel.getOrganizationId())
+        .environmentAlias(metadataModel.getEnvironmentAlias())
+        .accountId(metadataModel.getAccountId())
+        .region(Region.of(metadataModel.getRegion()))
+        .majorVersion(metadataModel.getMajorVersion())
+        .tagMap(metadataModel.getTags())
+        .build();
   }
 
   /** Private helper to create a {@link Metadata} from an Avro {@link LandingZoneModel} */
   private Metadata createMetadataFromELandingZoneModel(LandingZoneModel landingZoneModel) {
     MetadataModel metadataModel = landingZoneModel.getMetadata();
-    return new Metadata(
-        metadataModel.getAccountId(),
-        Region.of(metadataModel.getRegion()),
-        metadataModel.getTags());
+    return Metadata.builder()
+        .tenantAlias(metadataModel.getTenantAlias())
+        .organizationId(metadataModel.getOrganizationId())
+        .environmentAlias(metadataModel.getEnvironmentAlias())
+        .accountId(metadataModel.getAccountId())
+        .region(Region.of(metadataModel.getRegion()))
+        .majorVersion(metadataModel.getMajorVersion())
+        .tagMap(metadataModel.getTags())
+        .build();
   }
 }

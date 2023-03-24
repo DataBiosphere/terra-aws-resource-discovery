@@ -21,15 +21,13 @@ BASE64_EXE="$(which base64)"
 # Handle differences in OSX and GNU base64 implementations
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # Mac OSX
-  BASE64_ENCODE_COMMAND="$BASE64_EXE -i"
+  BASE64_ENCODE_COMMAND="$BASE64_EXE --input"
 else
   # GNU/Linux
   BASE64_ENCODE_COMMAND="$BASE64_EXE --wrap=0"
 fi
 
-
-
 jq -n -M \
-  --arg schemschemaa "$($BASE64_ENCODE_COMMAND "$1")" \
+  --arg schema "$($BASE64_ENCODE_COMMAND "$1")" \
   --arg payload "$($BASE64_ENCODE_COMMAND "$2")" \
   '{schema: $schema, payload: $payload}'

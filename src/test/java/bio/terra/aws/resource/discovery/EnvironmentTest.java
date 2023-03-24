@@ -14,6 +14,18 @@ public class EnvironmentTest extends EnvironmentDiscoveryTestBase {
     return Arn.builder().partition("junk").service("junk").resource("junk").build();
   }
 
+  private static Metadata buildJunkMetadata() {
+    return Metadata.builder()
+        .tenantAlias("junk")
+        .organizationId("junk")
+        .environmentAlias("junk")
+        .accountId("junk")
+        .region(Region.AWS_GLOBAL)
+        .majorVersion("junk")
+        .tagMap(Map.of())
+        .build();
+  }
+
   @Test
   public void equality() {
     // Self equality
@@ -61,7 +73,7 @@ public class EnvironmentTest extends EnvironmentDiscoveryTestBase {
     checkInequality(
         environment,
         Environment.builder()
-            .metadata(new Metadata("junk", Region.AWS_GLOBAL, Map.of()))
+            .metadata(buildJunkMetadata())
             .notebookRoleArn(environment.getNotebookRoleArn())
             .userRoleArn(environment.getUserRoleArn())
             .workspaceManagerRoleArn(environment.getWorkspaceManagerRoleArn())
