@@ -23,6 +23,7 @@ jobs:
     secrets: inherit
     with:
       with-v: true
+      bump-type: ${{ inputs.bump-type }}
 
   release:
     needs: [ tag ]
