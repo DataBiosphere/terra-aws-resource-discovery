@@ -1,7 +1,6 @@
 package bio.terra.aws.resource.discovery;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -19,12 +18,14 @@ import software.amazon.awssdk.regions.Region;
  * LandingZone}.
  */
 public class Environment {
+  private final Metadata metadata;
   private final Arn workspaceManagerRoleArn;
   private final Arn userRoleArn;
   private final Arn notebookRoleArn;
   private final Map<Region, LandingZone> landingZoneMap;
 
   private Environment(Builder builder) {
+    metadata = builder.metadata;
     workspaceManagerRoleArn = builder.workspaceManagerRoleArn;
     userRoleArn = builder.userRoleArn;
     notebookRoleArn = builder.notebookRoleArn;
@@ -33,6 +34,7 @@ public class Environment {
 
   /** Builder for class @{link Environment} */
   public static class Builder {
+    private Metadata metadata;
     private Arn workspaceManagerRoleArn;
     private Arn userRoleArn;
     private Arn notebookRoleArn;
@@ -40,6 +42,12 @@ public class Environment {
 
     private Builder() {
       landingZoneMap = new HashMap<>();
+    }
+
+    /** Set the metadata describing the Environment */
+    Builder metadata(Metadata metadata) {
+      this.metadata = metadata;
+      return this;
     }
 
     /** Set the AWS ARN for the TerraWorkspaceManager IAM Role Global Shared Resource */
@@ -75,6 +83,11 @@ public class Environment {
   /** Get a {@link Builder} for {@link Environment} */
   public static Builder builder() {
     return new Builder();
+  }
+
+  /** Get the {@link Metadata} describing the {@link Environment} */
+  public Metadata getMetadata() {
+    return metadata;
   }
 
   /** Get the AWS ARN for the TerraWorkspaceManager IAM Role Global Shared Resource */
@@ -113,7 +126,7 @@ public class Environment {
    * @return a set containing all AWS regions supported by the region
    */
   public Set<Region> getSupportedRegions() {
-    return new HashSet<>(landingZoneMap.keySet());
+    return Set.copyOf(landingZoneMap.keySet());
   }
 
   @Override
@@ -121,7 +134,8 @@ public class Environment {
     if (this == o) return true;
     if (!(o instanceof Environment)) return false;
     Environment that = (Environment) o;
-    return Objects.equals(workspaceManagerRoleArn, that.workspaceManagerRoleArn)
+    return Objects.equals(metadata, that.metadata)
+        && Objects.equals(workspaceManagerRoleArn, that.workspaceManagerRoleArn)
         && Objects.equals(userRoleArn, that.userRoleArn)
         && Objects.equals(notebookRoleArn, that.notebookRoleArn)
         && landingZoneMap.equals(that.landingZoneMap);
@@ -129,6 +143,7 @@ public class Environment {
 
   @Override
   public int hashCode() {
-    return Objects.hash(workspaceManagerRoleArn, userRoleArn, notebookRoleArn, landingZoneMap);
+    return Objects.hash(
+        metadata, workspaceManagerRoleArn, userRoleArn, notebookRoleArn, landingZoneMap);
   }
 }

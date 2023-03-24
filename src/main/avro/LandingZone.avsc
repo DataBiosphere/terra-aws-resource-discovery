@@ -20,6 +20,48 @@
       "type": "string"
     },
     {
+      "name": "metadata",
+      "type": {
+        "name": "LandingZoneMetadataModel",
+        "type": "record",
+        "fields":
+        [
+          {
+            "name": "tenant_alias",
+            "type": "string"
+          },
+          {
+            "name": "organization_id",
+            "type": "string"
+          },
+          {
+            "name": "environment_alias",
+            "type": "string"
+          },
+          {
+            "name": "account_id",
+            "type": "string"
+          },
+          {
+            "name": "region",
+            "type": "string"
+          },
+          {
+            "name": "major_version",
+            "type": "string"
+          },
+          {
+            "name": "tags",
+            "type":
+            {
+              "type": "map",
+              "values": "string"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "notebook_lifecycle_configuration_arns",
       "type": {
         "type": "array",

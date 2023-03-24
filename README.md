@@ -13,6 +13,10 @@ Table of Contents
   * [Configuration Schemas](#configuration-schemas)
   * [Schema Evolution and Versioning](#schema-evolution-and-versioning)
   * [Configuration Storage Layout](#configuration-storage-layout)
+* [Library Development Notes](#library-development-notes)
+  * [Static Test Data](#static-test-data)
+    * [Updating an Existing TEst Case Config File](#updating-an-existing-test-case-config-file) 
+    * [Writing a New Test Case Config File](#writing-a-new-test-case-config-file)
 
 # Introduction
 In order for Terra services to manage and provide access to [Controlled Resources](https://github.com/DataBiosphere/terra-workspace-manager#overview) 
@@ -123,7 +127,7 @@ v1
     ├── v1/landingzones/eu-central-1
     │   └── v1/landingzones/eu-central-1/config.json
     └── v1/landingzones/us-east-1
-        └── v1/landingzones/eu-central-1/config.json
+        └── v1/landingzones/us-east-1/config.json
 ```
 Each `config.json` file contains the following JSON content:
 ```json
@@ -140,3 +144,48 @@ Files `v1/landingzones/eu-central-1/config.json` and `v1/landingzones/eu-central
 schema [`LandingZone.avsc`](src/main/avro/LandingZone.avsc) to describe the Regional Support
 Resources in the Environment's Landing Zones in regions `eu-central-1` and `us-east-1` 
 respectively.
+# Library Development Notes
+## Static Test Data
+Class [`EnvironmentDiscoveryTestBase`](src/test/java/bio/terra/aws/resource/discovery/EnvironmentDiscoveryTestBase.java) 
+serves as a test fixture consuming static test data written in folder
+[`src/test/resources/test_discovery_data`](src/test/resources/test_discovery_data)
+to allow for testing of Avro parsing and schema validation.
+
+In order to update the static test schema files as schemas evolve (as well as create new test data)
+test authors can make use of the following scripts in the [`tools`](tools) directory:
+* [`parse-schema.sh`](tools/parse-schema.sh) parses the Base64-encoded Avro schema from a
+`config.json` Configuration file/object and prints it as plain JSON.
+* [`parse-payload.sh`](tools/parse-payload.sh) parses the Base64-encoded payload from a
+`config.json` Configuration file/object and prints it as plain JSON.
+* [`print-config.sh`](tools/print-config.sh) takes an Avro schema and payload data file (both in
+plain JSON) and Base64 encodes them into a configuration file format, printing the output to STDOUT
+
+### Updating an Existing Test Case Config File
+```shell
+# Make any changes to the Avro schema, in this case src/main/avro/Environment.avsc
+
+# Choose the file that you wish to update
+TEST_FILE="src/test/resources/test_discovery_data/validation/v0/environment/config.json"
+
+# Parse the payload from the existing test data file and write it to a scratch file for editing
+./tools/parse-payload.sh ${TEST_FILE} > /tmp/scratch.json
+
+# Make any changes to the test payload to the scratch file directly
+
+# Now write the updated schema and test data back to the original file
+./tools/print-config.sh src/main/avro/Environment.avsc /tmp/scratch.json > ${TEST_FILE} 
+```
+
+### Writing a New Test Case Config File
+```shell
+# Write your test case payload to a new file somewhere outside of the terra-aws-resource-discovery 
+# filesystem tree (optionally making any required schema changes in src/main/avro)
+NEW_TEST_DATA=/tmp/new_test.json
+
+# Identify the new test data case location
+NEW_TEST_CONFIG=src/test/resources/test_discovery_data/new_test_data/v0/environment/config.json
+
+# Now write the schema and new test data to the new config file
+./tools/print-config.sh src/main/avro/Environment.avsc ${NEW_TEST_DATA} > ${NEW_TEST_CONFIG}
+
+```

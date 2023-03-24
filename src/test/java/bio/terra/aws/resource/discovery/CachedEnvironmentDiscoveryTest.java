@@ -48,6 +48,16 @@ public class CachedEnvironmentDiscoveryTest extends EnvironmentDiscoveryTestBase
   }
 
   @Test
+  public void addFieldBeforeSchemaUpdate() throws IOException {
+    Duration expirationPeriod = Duration.ofMillis(500);
+    EnvironmentDiscovery discovery =
+        new FilesystemEnvironmentDiscovery(getAddFieldBeforeSchemaUpdateTestDataPath());
+    CachedEnvironmentDiscovery cachedEnvironmentDiscovery =
+        new CachedEnvironmentDiscovery(discovery, expirationPeriod);
+    addFieldBeforeSchemaUpdateTestLogic(cachedEnvironmentDiscovery);
+  }
+
+  @Test
   public void expiration() throws IOException, InterruptedException {
     Duration expirationPeriod = Duration.ofMillis(500);
     EnvironmentDiscovery discovery =

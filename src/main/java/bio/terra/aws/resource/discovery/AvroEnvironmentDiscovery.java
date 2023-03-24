@@ -1,6 +1,8 @@
 package bio.terra.aws.resource.discovery;
 
+import bio.terra.aws.resource.discovery.avro.EnvironmentMetadataModel;
 import bio.terra.aws.resource.discovery.avro.EnvironmentModel;
+import bio.terra.aws.resource.discovery.avro.LandingZoneMetadataModel;
 import bio.terra.aws.resource.discovery.avro.LandingZoneModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -30,7 +32,7 @@ import software.amazon.awssdk.regions.Region;
  * library's public object model; subclasses will be responsible for discovering the Avro records
  * stored hierarchically in different storage media types.
  */
-public abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
+abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
 
   public static final Integer SCHEMA_MAJOR_VERSION = 0;
 
@@ -91,6 +93,7 @@ public abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
 
     Environment.Builder environmentBuilder =
         Environment.builder()
+            .metadata(createMetadataFromEnvironmentModel(environmentModel))
             .workspaceManagerRoleArn(
                 Arn.fromString(environmentModel.getRoleArnTerraWorkspaceManager()))
             .userRoleArn(Arn.fromString(environmentModel.getRoleArnTerraUser()))
@@ -115,6 +118,7 @@ public abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
 
       LandingZone.Builder landingZoneBuilder =
           LandingZone.builder()
+              .metadata(createMetadataFromELandingZoneModel(landingZoneModel))
               .storageBucket(
                   Arn.fromString(landingZoneModel.getBucketArn()), landingZoneModel.getBucketId())
               .kmsKey(
@@ -177,5 +181,33 @@ public abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
     // the reader schema, and use the schema to marshal the data into the Java type.
     DatumReader<T> reader = new SpecificDatumReader<>(writerSchema, readerSchema);
     return reader.read(null, decoder);
+  }
+
+  /** Private helper to create a {@link Metadata} from an Avro {@link EnvironmentModel} */
+  private Metadata createMetadataFromEnvironmentModel(EnvironmentModel environmentModel) {
+    EnvironmentMetadataModel metadataModel = environmentModel.getMetadata();
+    return Metadata.builder()
+        .tenantAlias(metadataModel.getTenantAlias())
+        .organizationId(metadataModel.getOrganizationId())
+        .environmentAlias(metadataModel.getEnvironmentAlias())
+        .accountId(metadataModel.getAccountId())
+        .region(Region.of(metadataModel.getRegion()))
+        .majorVersion(metadataModel.getMajorVersion())
+        .tagMap(metadataModel.getTags())
+        .build();
+  }
+
+  /** Private helper to create a {@link Metadata} from an Avro {@link LandingZoneModel} */
+  private Metadata createMetadataFromELandingZoneModel(LandingZoneModel landingZoneModel) {
+    LandingZoneMetadataModel metadataModel = landingZoneModel.getMetadata();
+    return Metadata.builder()
+        .tenantAlias(metadataModel.getTenantAlias())
+        .organizationId(metadataModel.getOrganizationId())
+        .environmentAlias(metadataModel.getEnvironmentAlias())
+        .accountId(metadataModel.getAccountId())
+        .region(Region.of(metadataModel.getRegion()))
+        .majorVersion(metadataModel.getMajorVersion())
+        .tagMap(metadataModel.getTags())
+        .build();
   }
 }

@@ -44,4 +44,11 @@ public class FilesystemEnvironmentDiscoveryTest extends EnvironmentDiscoveryTest
         new FilesystemEnvironmentDiscovery(getNotebookLifecycleMismatchTestDataPath());
     notebookLifecycleMismatchTestLogic(discovery);
   }
+
+  @Test
+  public void addFieldBeforeSchemaUpdate() throws IOException {
+    EnvironmentDiscovery discovery =
+        new FilesystemEnvironmentDiscovery(getAddFieldBeforeSchemaUpdateTestDataPath());
+    addFieldBeforeSchemaUpdateTestLogic(discovery);
+  }
 }

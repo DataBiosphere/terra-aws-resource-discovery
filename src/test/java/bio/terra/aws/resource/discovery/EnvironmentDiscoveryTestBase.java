@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.InputMismatchException;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
@@ -12,9 +13,20 @@ import org.junit.jupiter.api.Assertions;
 import software.amazon.awssdk.arns.Arn;
 import software.amazon.awssdk.regions.Region;
 
+/**
+ * Please see the "Static Test Data" section of this repo's <a
+ * href="https://github.com/DataBiosphere/terra-aws-resource-discovery/blob/main/README.md##static-test-data">README
+ * file</a> for info on test files used in this class.
+ */
 public class EnvironmentDiscoveryTestBase {
 
   private static final String TEST_DATA_RESOURCE_PATH = "test_discovery_data";
+  private static final String METADATA_TENANT_ALIAS = "terra-saas";
+  private static final String METADATA_ORG_ID = "222222222222";
+  private static final String METADATA_ENVIRONMENT_ALIAS = "devel";
+  private static final String METADATA_ACCOUNT_ID = "111111111111";
+  private static String METADATA_MAJOR_VERSION = "v0";
+  private static final Map<String, String> METADATA_TAGS = Map.of("Version", "v0");
 
   private static final String NOTEBOOK_ROLE_ARN =
       "arn:aws:iam::111111111111:role/develwest-TerraNotebookExecution";
@@ -42,6 +54,18 @@ public class EnvironmentDiscoveryTestBase {
   private static final String US_WEST_NOTEBOOK_LIFECYCLE_NAME =
       "develwestTerraNotebookLifecycleConfigV1";
 
+  private Metadata buildMetatdata(Region region) {
+    return Metadata.builder()
+        .tenantAlias(METADATA_TENANT_ALIAS)
+        .organizationId(METADATA_ORG_ID)
+        .environmentAlias(METADATA_ENVIRONMENT_ALIAS)
+        .accountId(METADATA_ACCOUNT_ID)
+        .region(region)
+        .majorVersion(METADATA_MAJOR_VERSION)
+        .tagMap(METADATA_TAGS)
+        .build();
+  }
+
   private final Path basePath;
   private final Environment expectedEnvironment;
 
@@ -55,12 +79,14 @@ public class EnvironmentDiscoveryTestBase {
 
     expectedEnvironment =
         Environment.builder()
+            .metadata(buildMetatdata(Region.US_EAST_1))
             .notebookRoleArn(Arn.fromString(NOTEBOOK_ROLE_ARN))
             .workspaceManagerRoleArn(Arn.fromString(WSM_ROLE_ARN))
             .userRoleArn(Arn.fromString(USER_ROLE_ARN))
             .addLandingZone(
                 Region.US_EAST_1,
                 LandingZone.builder()
+                    .metadata(buildMetatdata(Region.US_EAST_1))
                     .storageBucket(Arn.fromString(US_EAST_BUCKET_ARN), US_EAST_BUCKET_NAME)
                     .kmsKey(
                         Arn.fromString(US_EAST_KMS_KEY_ARN), UUID.fromString(US_EAST_KMS_KEY_ID))
@@ -71,6 +97,7 @@ public class EnvironmentDiscoveryTestBase {
             .addLandingZone(
                 Region.US_WEST_1,
                 LandingZone.builder()
+                    .metadata(buildMetatdata(Region.US_WEST_1))
                     .storageBucket(Arn.fromString(US_WEST_BUCKET_ARN), US_WEST_BUCKET_NAME)
                     .kmsKey(
                         Arn.fromString(US_WEST_KMS_KEY_ARN), UUID.fromString(US_WEST_KMS_KEY_ID))
@@ -153,6 +180,7 @@ public class EnvironmentDiscoveryTestBase {
     Environment environment = environmentDiscovery.discoverEnvironment();
 
     // Global Support Resources should match
+    Assertions.assertEquals(expectedEnvironment.getMetadata(), environment.getMetadata());
     Assertions.assertEquals(
         expectedEnvironment.getNotebookRoleArn(), environment.getNotebookRoleArn());
     Assertions.assertEquals(expectedEnvironment.getUserRoleArn(), environment.getUserRoleArn());
@@ -209,5 +237,22 @@ public class EnvironmentDiscoveryTestBase {
         () -> {
           environmentDiscovery.discoverEnvironment();
         });
+  }
+
+  public String getAddFieldBeforeSchemaUpdateTestDataBucketName() {
+    return "add_field_before_schema_update";
+  }
+
+  public Path getAddFieldBeforeSchemaUpdateTestDataPath() {
+    return basePath.resolve(getAddFieldBeforeSchemaUpdateTestDataBucketName());
+  }
+
+  /**
+   * Same as "No Landing Zones" test logic, but adds a field to the payload that does not yet exist
+   * in the Environment schema. This should be silently ignored by Avro parsing.
+   */
+  public void addFieldBeforeSchemaUpdateTestLogic(EnvironmentDiscovery environmentDiscovery)
+      throws IOException {
+    noLandingZonesTestLogic(environmentDiscovery);
   }
 }
