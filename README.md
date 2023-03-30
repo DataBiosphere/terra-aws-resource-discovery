@@ -55,7 +55,7 @@ instance, passing the corresponding AWS Region for the Landing Zone within the E
 
 The following diagram illustrates the relationship between Environments, Regions, and Terra 
 Controlled Resources in AWS:
-![](AWS%20Workspace%20Landing%20Zone.png)
+![](images/AWS%20Workspace%20Landing%20Zone.png)
 
 The area in the dark purple dashed box represents the resources (Shared and Controlled) that make
 up a Terra AWS Landing Zone.
