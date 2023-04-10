@@ -33,6 +33,12 @@ jobs:
         id: static-analysis
         run: ./gradlew spotbugsMain spotbugsTest
 
+      - name: SonarQube scan
+        run: ./gradlew --build-cache sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build, assemble, and test
         id: build-test
         run: ./gradlew build --scan
