@@ -1,4 +1,4 @@
-name: Create a new release
+name: (Reusable workflow) Create a new release
 
 on:
   workflow_call:

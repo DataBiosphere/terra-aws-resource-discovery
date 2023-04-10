@@ -1,4 +1,4 @@
-name: Generate a new Tag
+name: (Reusable workflow) Generate a new Tag
 
 on:
   workflow_call:
