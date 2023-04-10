@@ -1,4 +1,4 @@
-name: Publish to Artifactory
+name: (Reusable workflow) Publish to Artifactory
 
 on:
   workflow_call:

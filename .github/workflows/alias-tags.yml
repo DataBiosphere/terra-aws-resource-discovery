@@ -1,4 +1,4 @@
-name: Generate a new Alias Tags
+name: (Reusable workflow) Generate a new Alias Tags
 
 on:
   workflow_call:
