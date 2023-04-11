@@ -25,15 +25,11 @@ jobs:
       - name: Setup gradlew
         uses: ./.github/actions/setup-gradlew
 
-      - name: Run linter
-        id: linter
-        run: ./gradlew spotlessCheck
-
       - name: Run static analysis
         id: static-analysis
         run: ./gradlew spotbugsMain spotbugsTest
 
-      - name: Build, assemble, and test
+      - name: Build, assemble, lint and test
         id: build-test
         run: ./gradlew build --scan
 
