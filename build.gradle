@@ -43,7 +43,7 @@ if (hasProperty('buildScan')) {
 }
 
 def gradleIncDir= "$rootDir/gradle"
-apply(from: "$gradleIncDir/dependencies.gradle")
+apply from: "$gradleIncDir/dependencies.gradle"
 apply from: "$gradleIncDir/dependency-locking.gradle"
 apply from: "$gradleIncDir/jacoco.gradle"
 apply from: "$gradleIncDir/javadoc.gradle"

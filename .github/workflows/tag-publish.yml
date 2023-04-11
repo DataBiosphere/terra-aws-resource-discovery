@@ -22,8 +22,9 @@ jobs:
     uses: ./.github/workflows/tag.yml
     secrets: inherit
     with:
-      with-v: true
       bump-type: ${{ inputs.bump-type }}
+      version-line-match: "^gradle.ext.releaseVersion"
+      with-v: true
 
   release:
     needs: [ tag ]
