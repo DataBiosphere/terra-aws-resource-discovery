@@ -23,7 +23,7 @@ jobs:
     secrets: inherit
     with:
       bump-type: ${{ inputs.bump-type }}
-      version-line-match: "^gradle.ext.releaseVersion"
+      version-line-match: "^\\s*gradle.ext.releaseVersion\\s*=\\s*'.*'"
       with-v: true
 
   release:

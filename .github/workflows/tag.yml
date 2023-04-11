@@ -27,7 +27,7 @@ on:
         description: 'Line containing the version string'
         type: string
         required: false
-        default: "^gradle.ext.version"
+        default: "^\\s*gradle.ext.version\\s*=\\s*'.*'"
       version-suffix:
         description: 'Version suffix'
         type: string
