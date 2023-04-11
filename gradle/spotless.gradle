@@ -10,4 +10,11 @@ spotless {
     }
 }
 
-build.dependsOn spotlessApply
+// Run spotless check when running in github actions, otherwise run spotless apply.
+build {
+    if (project.isCiServer) {
+        dependsOn(spotlessCheck)
+    } else {
+        dependsOn(spotlessApply)
+    }
+}
