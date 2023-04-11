@@ -1,4 +1,4 @@
 rootProject.name = 'terra-aws-resource-discovery'
 
-gradle.ext.projectGroup='bio.terra'
-gradle.ext.releaseVersion='v0.5.1'
+gradle.ext.projectGroup = 'bio.terra'
+gradle.ext.releaseVersion = 'v0.5.1'

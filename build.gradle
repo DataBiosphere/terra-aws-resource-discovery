@@ -13,6 +13,10 @@ plugins {
     id 'org.sonarqube' version '4.0.0.2929'
 }
 
+project.ext {
+    isCiServer = System.getenv().containsKey("CI")
+}
+
 // If true, search local repository (~/.m2/repository/) first for dependencies.
 def useMavenLocal = false
 repositories {
@@ -43,7 +47,7 @@ if (hasProperty('buildScan')) {
 }
 
 def gradleIncDir= "$rootDir/gradle"
-apply(from: "$gradleIncDir/dependencies.gradle")
+apply from: "$gradleIncDir/dependencies.gradle"
 apply from: "$gradleIncDir/dependency-locking.gradle"
 apply from: "$gradleIncDir/jacoco.gradle"
 apply from: "$gradleIncDir/javadoc.gradle"

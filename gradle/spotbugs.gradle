@@ -1,23 +1,25 @@
 spotbugs {
     effort = 'max'
-    // This makes the "html" reports come out in plain text so you can just open the file in IntelliJ
-    // and look at your bugs instead of having to switch to a browser.
     extraArgs = ['-emacs']
-    excludeFilter.set(file("gradle/spotbugsExclude.xml"))
+    excludeFilter.set(file('gradle/config/spotbugs/exclude.xml'))
 }
+
 spotbugsMain {
     reports {
         html {
-            enabled = true
-            destination = file("$buildDir/reports/spotbugs/main.html")
+            required = true
+            outputLocation = file("$buildDir/reports/spotbugs/main.html")
+            stylesheet = 'fancy.xsl'
         }
     }
 }
+
 spotbugsTest {
     reports {
         html {
-            enabled = true
-            destination = file("$buildDir/reports/spotbugs/test.html")
+            required = true
+            outputLocation = file("$buildDir/reports/spotbugs/test.html")
+            stylesheet = 'fancy.xsl'
         }
     }
 }
