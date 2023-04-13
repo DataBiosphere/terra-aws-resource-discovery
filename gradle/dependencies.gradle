@@ -1,7 +1,9 @@
 // Library Dependencies, Versions, etc.
 dependencies {
     ext {
+        jakarta = '3.0.2'
         avro = '1.11.1'
+        spring = '6.0.7'
         junitJupiter = '5.9.2'
 
         diffplugSpotless = '6.10.0'
@@ -9,7 +11,9 @@ dependencies {
     }
 
     // Used internally, and not exposed to consumers on their own compile classpath.
+    implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: "${jakarta}"
     implementation group: 'org.apache.avro', name: 'avro-compiler', version: "${avro}"
+    implementation group: 'org.springframework', name: 'spring-core', version: "${spring}"
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: "${junitJupiter}"
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: "${junitJupiter}"

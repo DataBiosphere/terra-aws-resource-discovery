@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import org.springframework.util.Assert;
 import software.amazon.awssdk.arns.Arn;
 import software.amazon.awssdk.regions.Region;
 
@@ -132,8 +133,7 @@ public class Environment {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof Environment)) return false;
-    Environment that = (Environment) o;
+    if (!(o instanceof Environment that)) return false;
     return Objects.equals(metadata, that.metadata)
         && Objects.equals(workspaceManagerRoleArn, that.workspaceManagerRoleArn)
         && Objects.equals(userRoleArn, that.userRoleArn)
@@ -145,5 +145,34 @@ public class Environment {
   public int hashCode() {
     return Objects.hash(
         metadata, workspaceManagerRoleArn, userRoleArn, notebookRoleArn, landingZoneMap);
+  }
+
+  /**
+   * Validates AWS environment
+   *
+   * @param environment AWS environment
+   * @param prefix Error message prefix
+   * @throws IllegalArgumentException environment error
+   */
+  public static void validate(Environment environment, String prefix)
+      throws IllegalArgumentException {
+    if (!prefix.endsWith(".")) {
+      prefix += ".";
+    }
+    Assert.notNull(environment, prefix + "environment null");
+    String envPrefix = prefix + "environment.";
+
+    Metadata.validate(environment.getMetadata(), envPrefix);
+    Assert.notNull(
+        environment.getWorkspaceManagerRoleArn(), envPrefix + "workspaceManagerRoleArn null");
+    Assert.notNull(environment.getUserRoleArn(), envPrefix + "userRoleArn null");
+    Assert.notNull(environment.getNotebookRoleArn(), envPrefix + "notebookRoleArn null");
+
+    Assert.notEmpty(environment.getSupportedRegions(), envPrefix + "supportedRegions empty");
+    environment
+        .getSupportedRegions()
+        .forEach(
+            region ->
+                LandingZone.validate(environment.getLandingZone(region).orElse(null), envPrefix));
   }
 }

@@ -2,6 +2,7 @@ package bio.terra.aws.resource.discovery;
 
 import java.util.Map;
 import java.util.Objects;
+import org.springframework.util.Assert;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.utils.Validate;
 
@@ -158,5 +159,27 @@ public class Metadata {
         getRegion(),
         getMajorVersion(),
         getTagMap());
+  }
+
+  /**
+   * Validates AWS metadata
+   *
+   * @param metadata AWS metadata
+   * @param prefix Error message prefix
+   * @throws IllegalArgumentException environment error
+   */
+  public static void validate(Metadata metadata, String prefix) throws IllegalArgumentException {
+    if (!prefix.endsWith(".")) {
+      prefix += ".";
+    }
+    Assert.notNull(metadata, prefix + "metadata null");
+    String mdPrefix = prefix + "metadata.";
+
+    Assert.hasLength(metadata.getTenantAlias(), mdPrefix + "tenantAlias empty");
+    Assert.hasLength(metadata.getOrganizationId(), mdPrefix + "organizationId empty");
+    Assert.hasLength(metadata.getEnvironmentAlias(), mdPrefix + "environmentAlias empty");
+    Assert.hasLength(metadata.getAccountId(), mdPrefix + "accountId empty");
+    Assert.notNull(metadata.getRegion(), mdPrefix + "region null");
+    Assert.hasLength(metadata.getMajorVersion(), mdPrefix + "majorVersion empty");
   }
 }
