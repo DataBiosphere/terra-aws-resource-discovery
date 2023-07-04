@@ -94,42 +94,42 @@ public class Metadata {
     private String majorVersion;
     private Map<String, String> tagMap;
 
-    Builder tenantAlias(String tenantAlias) {
+    public Builder tenantAlias(String tenantAlias) {
       this.tenantAlias = tenantAlias;
       return this;
     }
 
-    Builder organizationId(String organizationId) {
+    public Builder organizationId(String organizationId) {
       this.organizationId = organizationId;
       return this;
     }
 
-    Builder environmentAlias(String environmentAlias) {
+    public Builder environmentAlias(String environmentAlias) {
       this.environmentAlias = environmentAlias;
       return this;
     }
 
-    Builder accountId(String accountId) {
+    public Builder accountId(String accountId) {
       this.accountId = accountId;
       return this;
     }
 
-    Builder region(Region region) {
+    public Builder region(Region region) {
       this.region = region;
       return this;
     }
 
-    Builder majorVersion(String majorVersion) {
+    public Builder majorVersion(String majorVersion) {
       this.majorVersion = majorVersion;
       return this;
     }
 
-    Builder tagMap(Map<String, String> tagMap) {
+    public Builder tagMap(Map<String, String> tagMap) {
       this.tagMap = tagMap;
       return this;
     }
 
-    Metadata build() {
+    public Metadata build() {
       return new Metadata(this);
     }
   }

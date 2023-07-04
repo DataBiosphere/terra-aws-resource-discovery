@@ -47,31 +47,31 @@ public class LandingZone {
     }
 
     /** Set the metadata describing the LandingZone */
-    Builder metadata(Metadata metadata) {
+    public Builder metadata(Metadata metadata) {
       this.metadata = metadata;
       return this;
     }
 
     /** Set the Landing Zone's AWS S3 Storage Bucket's ARN and Name */
-    Builder storageBucket(Arn arn, String name) {
+    public Builder storageBucket(Arn arn, String name) {
       storageBucket = new StorageBucket(arn, name);
       return this;
     }
 
     /** Set the Landing Zone's KNS Key's ARN and UUID */
-    Builder kmsKey(Arn arn, UUID id) {
+    public Builder kmsKey(Arn arn, UUID id) {
       kmsKey = new KmsKey(arn, id);
       return this;
     }
 
     /** Add a Sagemaker Notebook Lifecycle Configuration to the Landing Zone */
-    Builder addNotebookLifecycleConfiguration(Arn arn, String name) {
+    public Builder addNotebookLifecycleConfiguration(Arn arn, String name) {
       notebookLifecycleConfigurations.add(new NotebookLifecycleConfiguration(arn, name));
       return this;
     }
 
     /** Build the {@link LandingZone} instance */
-    LandingZone build() {
+    public LandingZone build() {
       return new LandingZone(this);
     }
   }
@@ -93,7 +93,7 @@ public class LandingZone {
   /**
    * Gets the Landing Zone's AWS Sagemaker Notebook Lifecycle Configurations
    *
-   * @return a list of {@link NotebookLifecycleConfiguration} representing all of the Landing Zone's
+   * @return a list of {@link NotebookLifecycleConfiguration} representing all the Landing Zone's
    *     AWS Sagemaker Notebook Lifecycle Configurations
    */
   public List<NotebookLifecycleConfiguration> getNotebookLifecycleConfigurations() {

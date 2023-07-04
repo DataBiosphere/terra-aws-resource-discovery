@@ -19,7 +19,6 @@ public class CachedEnvironmentDiscovery implements EnvironmentDiscovery {
   }
 
   public record CachedEnvironment(Environment environment, Instant expirationTime) {}
-  ;
 
   private boolean isExpired() {
     return Instant.now().isAfter(expirationTime);

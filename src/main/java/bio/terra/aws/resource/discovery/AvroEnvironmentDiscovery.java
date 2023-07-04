@@ -100,7 +100,7 @@ abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
             .notebookRoleArn(Arn.fromString(environmentModel.getRoleArnTerraNotebook()));
 
     // Call into subclassed getLandingZoneConfigurations() method to get parsed Avro configuration
-    // records describing the Terra AWS Landing Zone Regionsal Support Resources for all supported
+    // records describing the Terra AWS Landing Zone Regional Support Resources for all supported
     // AWS Regions.
     Map<Region, AvroConfiguration> landingZoneConfigurations = getLandingZoneConfigurations(mapper);
 
@@ -146,7 +146,7 @@ abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
       environmentBuilder.addLandingZone(entry.getKey(), landingZoneBuilder.build());
     }
 
-    // Now that all of the LandingZones have been discovered and added to the Environment builder,
+    // Now that all the LandingZones have been discovered and added to the Environment builder,
     // build
     // the Environment instance and return to the caller.
     return environmentBuilder.build();
