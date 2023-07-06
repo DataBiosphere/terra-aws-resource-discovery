@@ -12,7 +12,7 @@ public interface EnvironmentDiscovery {
    * Environment and its associated Landing Zones.
    *
    * @return an {@link Environment} instance representing an Environment's Support Resources
-   * @throws IOException
+   * @throws IOException IOException
    */
-  public Environment discoverEnvironment() throws IOException;
+  Environment discoverEnvironment() throws IOException;
 }

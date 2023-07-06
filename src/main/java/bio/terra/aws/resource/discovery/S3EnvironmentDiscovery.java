@@ -70,8 +70,7 @@ public class S3EnvironmentDiscovery extends AvroEnvironmentDiscovery {
     try {
       s3Client.headBucket(request);
     } catch (NoSuchBucketException exception) {
-      throw new NoSuchElementException(
-          String.format("Bucket '%s' does not exist.", bucketName, bucketName));
+      throw new NoSuchElementException(String.format("Bucket '%s' does not exist.", bucketName));
     }
   }
 

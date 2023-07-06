@@ -45,37 +45,37 @@ public class Environment {
     }
 
     /** Set the metadata describing the Environment */
-    Builder metadata(Metadata metadata) {
+    public Builder metadata(Metadata metadata) {
       this.metadata = metadata;
       return this;
     }
 
     /** Set the AWS ARN for the TerraWorkspaceManager IAM Role Global Shared Resource */
-    Builder workspaceManagerRoleArn(Arn arn) {
+    public Builder workspaceManagerRoleArn(Arn arn) {
       workspaceManagerRoleArn = arn;
       return this;
     }
 
     /** Set the AWS ARN for the TerraUser IAM Role Global Shared Resource */
-    Builder userRoleArn(Arn arn) {
+    public Builder userRoleArn(Arn arn) {
       userRoleArn = arn;
       return this;
     }
 
     /** Set the AWS ARN for the TerraNotebookExecution IAM Role Global Shared Resource */
-    Builder notebookRoleArn(Arn arn) {
+    public Builder notebookRoleArn(Arn arn) {
       notebookRoleArn = arn;
       return this;
     }
 
     /** Add a {@link LandingZone} to the {@link Environment} being built for a given AWS region */
-    Builder addLandingZone(Region region, LandingZone landingZone) {
+    public Builder addLandingZone(Region region, LandingZone landingZone) {
       landingZoneMap.put(region, landingZone);
       return this;
     }
 
     /** Build the {@link Environment} instance */
-    Environment build() {
+    public Environment build() {
       return new Environment(this);
     }
   }
@@ -119,7 +119,7 @@ public class Environment {
   }
 
   /**
-   * Returns a {@link Set<Region>} containing all of the AWS Regions supported by an {@link
+   * Returns a {@link Set<Region>} containing all the AWS Regions supported by an {@link
    * Environment}. For all regions contained in this set, a call to {@link
    * Environment#getLandingZone(Region)} should return a non-empty {@link Optional<LandingZone>}.
    *
