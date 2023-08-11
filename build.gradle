@@ -13,6 +13,11 @@ plugins {
     id 'org.sonarqube' version '4.0.0.2929'
 }
 
+configurations.all {
+  // Bump required by CVE-2022-42920. This update will be released in spotbugs 4.7.4.
+  resolutionStrategy.force 'org.apache.bcel:bcel:6.6.1'
+}
+
 group = gradle.projectGroup
 
 project.ext {
