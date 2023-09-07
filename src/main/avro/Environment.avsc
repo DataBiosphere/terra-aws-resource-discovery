@@ -4,6 +4,10 @@
   "namespace": "bio.terra.aws.resource.discovery.avro",
   "fields": [
     {
+        "name": "app_instance_profile_name",
+        "type": "string"
+    },
+    {
       "name": "metadata",
       "type": {
         "name": "EnvironmentMetadataModel",

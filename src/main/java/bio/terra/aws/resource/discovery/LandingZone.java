@@ -9,12 +9,21 @@ import software.amazon.awssdk.utils.Validate;
 
 /** Represents all the Regional Support Resources in a Terra AWS Landing Zone. */
 public class LandingZone {
+  private final String applicationVpcId;
+  private final String applicationVpcPrivateSubnetId;
   private final Metadata metadata;
   private final StorageBucket storageBucket;
   private final KmsKey kmsKey;
   private final List<NotebookLifecycleConfiguration> notebookLifecycleConfigurations;
 
   private LandingZone(Builder builder) {
+    Validate.notNull(builder.applicationVpcId, "Application VPC ID may not be null.");
+    this.applicationVpcId = builder.applicationVpcId;
+
+    Validate.notNull(
+        builder.applicationVpcPrivateSubnetId, "Application VPC Subnet ID may not be null.");
+    this.applicationVpcPrivateSubnetId = builder.applicationVpcPrivateSubnetId;
+
     Validate.notNull(builder.metadata, "Metadata may not be null.");
     this.metadata = builder.metadata;
 
@@ -37,6 +46,8 @@ public class LandingZone {
 
   /** Builder for class @{link LandingZone} */
   public static class Builder {
+    private String applicationVpcId;
+    private String applicationVpcPrivateSubnetId;
     private Metadata metadata;
     private StorageBucket storageBucket;
     private KmsKey kmsKey;
@@ -44,6 +55,18 @@ public class LandingZone {
 
     private Builder() {
       notebookLifecycleConfigurations = new ArrayList<>();
+    }
+
+    /** Set the ID of the dedicated VPC to place Application EC2 instances into. */
+    public Builder applicationVpcId(String applicationVpcId) {
+      this.applicationVpcId = applicationVpcId;
+      return this;
+    }
+
+    /** Set the ID of the dedicated private VPC subnet to place Application EC2 instances into. */
+    public Builder applicationVpcPrivateSubnetId(String applicationVpcPrivateSubnetId) {
+      this.applicationVpcPrivateSubnetId = applicationVpcPrivateSubnetId;
+      return this;
     }
 
     /** Set the metadata describing the LandingZone */
@@ -75,6 +98,17 @@ public class LandingZone {
       return new LandingZone(this);
     }
   }
+
+  /** Get the ID of the dedicated VPC to place Application EC2 instances into. */
+  public String getApplicationVpcId() {
+    return applicationVpcId;
+  }
+
+  /** Get the ID of the dedicated private VPC subnet to place Application EC2 instances into. */
+  public String getApplicationVpcPrivateSubnetId() {
+    return applicationVpcPrivateSubnetId;
+  }
+
   /** Get the {@link Metadata} describing the {@link Environment} */
   public Metadata getMetadata() {
     return metadata;
@@ -105,7 +139,9 @@ public class LandingZone {
     if (this == o) return true;
     if (!(o instanceof LandingZone)) return false;
     LandingZone that = (LandingZone) o;
-    return Objects.equals(metadata, that.metadata)
+    return Objects.equals(applicationVpcId, that.applicationVpcId)
+        && Objects.equals(applicationVpcPrivateSubnetId, that.applicationVpcPrivateSubnetId)
+        && Objects.equals(metadata, that.metadata)
         && Objects.equals(storageBucket, that.storageBucket)
         && kmsKey.equals(that.kmsKey)
         && notebookLifecycleConfigurations.equals(that.notebookLifecycleConfigurations);
@@ -114,6 +150,11 @@ public class LandingZone {
   @Override
   public int hashCode() {
     return Objects.hash(
-        metadata, storageBucket, kmsKey, notebookLifecycleConfigurations.hashCode());
+        applicationVpcId,
+        applicationVpcPrivateSubnetId,
+        metadata,
+        storageBucket,
+        kmsKey,
+        notebookLifecycleConfigurations.hashCode());
   }
 }

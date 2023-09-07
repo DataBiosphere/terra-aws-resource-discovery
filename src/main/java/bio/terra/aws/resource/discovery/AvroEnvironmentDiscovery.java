@@ -93,6 +93,7 @@ abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
 
     Environment.Builder environmentBuilder =
         Environment.builder()
+            .applicationInstanceProfileName(environmentModel.getAppInstanceProfileName())
             .metadata(createMetadataFromEnvironmentModel(environmentModel))
             .workspaceManagerRoleArn(
                 Arn.fromString(environmentModel.getRoleArnTerraWorkspaceManager()))
@@ -118,6 +119,8 @@ abstract class AvroEnvironmentDiscovery implements EnvironmentDiscovery {
 
       LandingZone.Builder landingZoneBuilder =
           LandingZone.builder()
+              .applicationVpcId(landingZoneModel.getAppFrameworkVpcId())
+              .applicationVpcPrivateSubnetId(landingZoneModel.getAppFrameworkPrivateSubnetId())
               .metadata(createMetadataFromELandingZoneModel(landingZoneModel))
               .storageBucket(
                   Arn.fromString(landingZoneModel.getBucketArn()), landingZoneModel.getBucketId())

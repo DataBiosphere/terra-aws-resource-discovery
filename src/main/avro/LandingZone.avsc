@@ -4,6 +4,14 @@
   "namespace": "bio.terra.aws.resource.discovery.avro",
   "fields": [
     {
+      "name": "app_framework_private_subnet_id",
+      "type": "string"
+    },
+    {
+      "name": "app_framework_vpc_id",
+      "type": "string"
+    },
+    {
       "name": "bucket_arn",
       "type": "string"
     },

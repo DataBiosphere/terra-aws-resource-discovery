@@ -21,6 +21,8 @@ import software.amazon.awssdk.regions.Region;
 public class EnvironmentDiscoveryTestBase {
 
   private static final String TEST_DATA_RESOURCE_PATH = "test_discovery_data";
+  private static final String APPLICATION_INSTANCE_PROFILE_NAME =
+      "develwest-AppInstanceInstanceProfile";
   private static final String METADATA_TENANT_ALIAS = "terra-saas";
   private static final String METADATA_ORG_ID = "222222222222";
   private static final String METADATA_ENVIRONMENT_ALIAS = "devel";
@@ -34,6 +36,9 @@ public class EnvironmentDiscoveryTestBase {
   private static final String WSM_ROLE_ARN =
       "arn:aws:iam::111111111111:role/develwest-TerraNWorkspaceManager";
 
+  private static final String US_EAST_APPLICATION_VPC_ID = "vpc-22222222222222222";
+  private static final String US_EAST_APPLICATION_VPC_PRIVATE_SUBNET_ID =
+      "subnet-11111111111111111";
   private static final String US_EAST_BUCKET_ARN = "arn:aws:s3:::develeastverily-terra-workspace";
   private static final String US_EAST_BUCKET_NAME = "develeastverily-terra-workspace";
   private static final String US_EAST_KMS_KEY_ARN =
@@ -44,6 +49,9 @@ public class EnvironmentDiscoveryTestBase {
   private static final String US_EAST_NOTEBOOK_LIFECYCLE_NAME =
       "develeastTerraNotebookLifecycleConfigV1";
 
+  private static final String US_WEST_APPLICATION_VPC_ID = "vpc-44444444444444444";
+  private static final String US_WEST_APPLICATION_VPC_PRIVATE_SUBNET_ID =
+      "subnet-33333333333333333";
   private static final String US_WEST_BUCKET_ARN = "arn:aws:s3:::develwestverily-terra-workspace";
   private static final String US_WEST_BUCKET_NAME = "develwestverily-terra-workspace";
   private static final String US_WEST_KMS_KEY_ARN =
@@ -79,6 +87,7 @@ public class EnvironmentDiscoveryTestBase {
 
     expectedEnvironment =
         Environment.builder()
+            .applicationInstanceProfileName(APPLICATION_INSTANCE_PROFILE_NAME)
             .metadata(buildMetatdata(Region.US_EAST_1))
             .notebookRoleArn(Arn.fromString(NOTEBOOK_ROLE_ARN))
             .workspaceManagerRoleArn(Arn.fromString(WSM_ROLE_ARN))
@@ -86,6 +95,8 @@ public class EnvironmentDiscoveryTestBase {
             .addLandingZone(
                 Region.US_EAST_1,
                 LandingZone.builder()
+                    .applicationVpcId(US_EAST_APPLICATION_VPC_ID)
+                    .applicationVpcPrivateSubnetId(US_EAST_APPLICATION_VPC_PRIVATE_SUBNET_ID)
                     .metadata(buildMetatdata(Region.US_EAST_1))
                     .storageBucket(Arn.fromString(US_EAST_BUCKET_ARN), US_EAST_BUCKET_NAME)
                     .kmsKey(
@@ -97,6 +108,8 @@ public class EnvironmentDiscoveryTestBase {
             .addLandingZone(
                 Region.US_WEST_1,
                 LandingZone.builder()
+                    .applicationVpcId(US_WEST_APPLICATION_VPC_ID)
+                    .applicationVpcPrivateSubnetId(US_WEST_APPLICATION_VPC_PRIVATE_SUBNET_ID)
                     .metadata(buildMetatdata(Region.US_WEST_1))
                     .storageBucket(Arn.fromString(US_WEST_BUCKET_ARN), US_WEST_BUCKET_NAME)
                     .kmsKey(
