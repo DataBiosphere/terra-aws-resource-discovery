@@ -70,7 +70,7 @@ public class EnvironmentTest extends EnvironmentDiscoveryTestBase {
     String string = "string";
     Assertions.assertNotEquals((Object) environment, (Object) string);
 
-    // Different Notebook Role Arn
+    // Different Instance Profile Name
     checkInequality(
         environment,
         Environment.builder()
