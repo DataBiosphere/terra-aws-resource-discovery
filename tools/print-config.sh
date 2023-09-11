@@ -21,7 +21,7 @@ BASE64_EXE="$(which base64)"
 # Handle differences in OSX and GNU base64 implementations
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # Mac OSX
-  BASE64_ENCODE_COMMAND="$BASE64_EXE --input"
+  BASE64_ENCODE_COMMAND="$BASE64_EXE -i"
 else
   # GNU/Linux
   BASE64_ENCODE_COMMAND="$BASE64_EXE --wrap=0"

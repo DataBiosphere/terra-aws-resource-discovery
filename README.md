@@ -15,23 +15,23 @@ Table of Contents
   * [Configuration Storage Layout](#configuration-storage-layout)
 * [Library Development Notes](#library-development-notes)
   * [Static Test Data](#static-test-data)
-    * [Updating an Existing Test Case Config File](#updating-an-existing-test-case-config-file) 
+    * [Updating an Existing Test Case Config File](#updating-an-existing-test-case-config-file)
     * [Writing a New Test Case Config File](#writing-a-new-test-case-config-file)
 
 # Introduction
-In order for Terra services to manage and provide access to [Controlled Resources](https://github.com/DataBiosphere/terra-workspace-manager#overview) 
+In order for Terra services to manage and provide access to [Controlled Resources](https://github.com/DataBiosphere/terra-workspace-manager#overview)
 in Amazon Web Services (AWS), there must exist several AWS cloud resources used for this purpose.
 These resources will be referred to as **Support Resources**.
 
 Support resources may be [**Global** or **Regional**](https://docs.aws.amazon.com/ram/latest/userguide/working-with-regional-vs-global.html):
-* **Global Support Resources** are resources that do not exist in an AWS Region.  These are 
-most commonly (but not limited to) IAM resources ([IAM Roles](https://aws.amazon.com/iam/features/manage-roles/), 
+* **Global Support Resources** are resources that do not exist in an AWS Region.  These are
+most commonly (but not limited to) IAM resources ([IAM Roles](https://aws.amazon.com/iam/features/manage-roles/),
 [IAM Policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#policies_id-based)).
-* **Regional Support Resources** are resources that exist in a specific AWS Region, such as [S3 
+* **Regional Support Resources** are resources that exist in a specific AWS Region, such as [S3
 storage buckets](https://aws.amazon.com/s3/) and [KMS Keys](https://aws.amazon.com/kms/).
 
-This library provides the ability to discover all of the Support Resources needed by Terra services and 
-present in a given AWS environment, so that Terra services can make use of these Support Resources to 
+This library provides the ability to discover all of the Support Resources needed by Terra services and
+present in a given AWS environment, so that Terra services can make use of these Support Resources to
 create and provide access to Terra Controlled Resources in AWS.
 
 # Support Resource Organization
@@ -53,7 +53,7 @@ Terra AWS Environment.
 Instances of class `LandingZone` are obtained by calling method `getLandingZone()` on an `Environment`
 instance, passing the corresponding AWS Region for the Landing Zone within the Environment.
 
-The following diagram illustrates the relationship between Environments, Regions, and Terra 
+The following diagram illustrates the relationship between Environments, Regions, and Terra
 Controlled Resources in AWS:
 ![](images/AWS%20Workspace%20Landing%20Zone.png)
 
@@ -66,7 +66,7 @@ Deployment of Support Resources in an AWS Environment is out of scope for this d
 producers of these resources are required to provide discoverability of their Support Resources by
 using the conventions described below.
 ## Configuration Schemas
-We have chosen to use [Apache Avro](https://avro.apache.org/) for specifying the schema for Support 
+We have chosen to use [Apache Avro](https://avro.apache.org/) for specifying the schema for Support
 Resource discovery, for several reasons:
 * Strong schema evolution support.
 * Support for many programming languages, supporting both Java service development and
@@ -92,28 +92,28 @@ Thus, when a configuration  is written to storage, it will include both the vers
 used to write the data (as retrieved from the artifacts of this library, published to GitHub with
 each release) as well as the data itself.
 
-We will maintain Forward Transitive Compatibility as described in 
+We will maintain Forward Transitive Compatibility as described in
 [this document](https://docs.confluent.io/platform/current/schema-registry/avro.html#forward-compatibility).
 
 Specifically, these are the rules we will follow:
 * Any change to either Avro Schema file *must* incur at least a minor version bump.
 * Fields may be added to the schema without breaking forward transitive compatibility.
 * Optional fields may be deleted without breaking forward transitive compatibility.
-* Producers of configuration artifacts (backend infrastructure deployment) *must* be updated before 
+* Producers of configuration artifacts (backend infrastructure deployment) *must* be updated before
 consumers (Terra services).
 * Breaking changes *must* be a major version bump, and should be avoided.  *We will not support
 forward compatibility between major versions.*
 
 ## Configuration Storage Layout
-The `terra-aws-resource-discovery` provides discovery of all Support Resources in a single 
+The `terra-aws-resource-discovery` provides discovery of all Support Resources in a single
 Environment through interface [`EnvironmentDiscovery`](src/main/java/bio/terra/aws/resource/discovery/EnvironmentDiscovery.java).
 Three implementations of this interface are provided:
-* Class [`S3EnvironmentDiscovery`](src/main/java/bio/terra/aws/resource/discovery/S3EnvironmentDiscovery.java) 
+* Class [`S3EnvironmentDiscovery`](src/main/java/bio/terra/aws/resource/discovery/S3EnvironmentDiscovery.java)
 discovers Support Resources by reading them from an S3 bucket that the caller has access to.
 * Class [`FilesystemEnvironmentDiscovery`](src/main/java/bio/terra/aws/resource/discovery/FilesystemEnvironmentDiscovery.java)
 discovers Support Resources by reading them from directories within an accessible file system path.
-* Class [`CachedEnvironmentDiscovery`](src/main/java/bio/terra/aws/resource/discovery/CachedEnvironmentDiscovery.java) 
-is used in conjunction with one of the two above classes to cache discovery results between calls to 
+* Class [`CachedEnvironmentDiscovery`](src/main/java/bio/terra/aws/resource/discovery/CachedEnvironmentDiscovery.java)
+is used in conjunction with one of the two above classes to cache discovery results between calls to
 `discoverEnvironment()`, in order to reduce the number of calls to storage API's.
 
 Whether stored in an S3 Bucket or a local file system directory, the following layout is expected
@@ -142,7 +142,7 @@ to describe the Global Support Resources in the Environment.
 
 Files `v1/landingzones/eu-central-1/config.json` and `v1/landingzones/eu-central-1/config.json` use
 schema [`LandingZone.avsc`](src/main/avro/LandingZone.avsc) to describe the Regional Support
-Resources in the Environment's Landing Zones in regions `eu-central-1` and `us-east-1` 
+Resources in the Environment's Landing Zones in regions `eu-central-1` and `us-east-1`
 respectively.
 
 # Library Development Notes
@@ -154,13 +154,20 @@ We use [Gradle's dependency locking](https://docs.gradle.org/current/userguide/d
 ```
 
 ## Static Test Data
-Class [`EnvironmentDiscoveryTestBase`](src/test/java/bio/terra/aws/resource/discovery/EnvironmentDiscoveryTestBase.java) 
+Class [`EnvironmentDiscoveryTestBase`](src/test/java/bio/terra/aws/resource/discovery/EnvironmentDiscoveryTestBase.java)
 serves as a test fixture consuming static test data written in folder
 [`src/test/resources/test_discovery_data`](src/test/resources/test_discovery_data)
 to allow for testing of Avro parsing and schema validation.
 
 In order to update the static test schema files as schemas evolve (as well as create new test data)
 test authors can make use of the following scripts in the [`tools`](tools) directory:
+* [`decode-test-data.sh`](tools/decode-test-data.sh) creates an out-of-tree directory (mirroring the
+  structure of the `src/test/resources/test_discovery_data` directory tree), but with the payload
+  parsed into un-encoded JSON.  Changes can be made in this out-of-tree location to the plaintext
+  JSON and written back to the source tree using `encode-test-data.sh` script.
+* [`encode-test-data.sh`](tools/encode-test-data.sh) can be used to write the payload changes made
+  to an out-of-tree directory created with `decode-test-data.sh` back to the in-tree test
+  configuration files in encoded form (along with the current in-tree schema versions).
 * [`parse-schema.sh`](tools/parse-schema.sh) parses the Base64-encoded Avro schema from a
 `config.json` Configuration file/object and prints it as plain JSON.
 * [`parse-payload.sh`](tools/parse-payload.sh) parses the Base64-encoded payload from a
@@ -168,7 +175,28 @@ test authors can make use of the following scripts in the [`tools`](tools) direc
 * [`print-config.sh`](tools/print-config.sh) takes an Avro schema and payload data file (both in
 plain JSON) and Base64 encodes them into a configuration file format, printing the output to STDOUT
 
-### Updating an Existing Test Case Config File
+### Updating Multiple Test Case Config Files
+``` shell
+# Decode all test payloads into empty directory ~/DiscoveryTestData
+$ ./tools/decode-test-data.sh src/test/resources/test_discovery_data /DiscoveryTestData
+
+# The following unencoded JSON files mirror those in the src/test/resources/test_discovery_data
+# directory.  These payload files can be edited in-place to update the test data payloads.
+$ find /DiscoveryTestData/ -type file
+/Users/jczerk/DiscoveryTestData//add_field_before_schema_update/v0/environment/payload.json
+/DiscoveryTestData//notebook_lifecycle_mismatch/v0/environment/payload.json
+/DiscoveryTestData//notebook_lifecycle_mismatch/v0/landingzones/us-east-1/payload.json
+/DiscoveryTestData//no_landing_zones/v0/environment/payload.json
+/DiscoveryTestData//validation/v0/environment/payload.json
+/DiscoveryTestData//validation/v0/landingzones/us-west-1/payload.json
+/DiscoveryTestData//validation/v0/landingzones/us-east-1/payload.json
+/DiscoveryTestData//validation/v0/landingzones/fake-region/payload.json
+
+# Now use the encode-test-data.sh script to encode the updated payloads (along with any
+# in-tree schema updates from src/main/avro) into the in-tree test configuration files.
+$ ./tools/encode-test-data.sh src/main/avro/ ~/DiscoveryTestData/ src/test/resources/test_discovery_data/
+```
+### Updating a Single Existing Test Case Config File
 ```shell
 # Make any changes to the Avro schema, in this case src/main/avro/Environment.avsc
 
@@ -181,12 +209,12 @@ TEST_FILE="src/test/resources/test_discovery_data/validation/v0/environment/conf
 # Make any changes to the test payload to the scratch file directly
 
 # Now write the updated schema and test data back to the original file
-./tools/print-config.sh src/main/avro/Environment.avsc /tmp/scratch.json > ${TEST_FILE} 
+./tools/print-config.sh src/main/avro/Environment.avsc /tmp/scratch.json > ${TEST_FILE}
 ```
 
 ### Writing a New Test Case Config File
 ```shell
-# Write your test case payload to a new file somewhere outside of the terra-aws-resource-discovery 
+# Write your test case payload to a new file somewhere outside of the terra-aws-resource-discovery
 # filesystem tree (optionally making any required schema changes in src/main/avro)
 NEW_TEST_DATA=/tmp/new_test.json
 

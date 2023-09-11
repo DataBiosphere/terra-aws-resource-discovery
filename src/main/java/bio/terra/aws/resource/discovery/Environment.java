@@ -18,6 +18,7 @@ import software.amazon.awssdk.regions.Region;
  * LandingZone}.
  */
 public class Environment {
+  private final String applicationInstanceProfileName;
   private final Metadata metadata;
   private final Arn workspaceManagerRoleArn;
   private final Arn userRoleArn;
@@ -25,6 +26,7 @@ public class Environment {
   private final Map<Region, LandingZone> landingZoneMap;
 
   private Environment(Builder builder) {
+    applicationInstanceProfileName = builder.applicationInstanceProfileName;
     metadata = builder.metadata;
     workspaceManagerRoleArn = builder.workspaceManagerRoleArn;
     userRoleArn = builder.userRoleArn;
@@ -34,6 +36,7 @@ public class Environment {
 
   /** Builder for class @{link Environment} */
   public static class Builder {
+    private String applicationInstanceProfileName;
     private Metadata metadata;
     private Arn workspaceManagerRoleArn;
     private Arn userRoleArn;
@@ -44,6 +47,11 @@ public class Environment {
       landingZoneMap = new HashMap<>();
     }
 
+    /** Set the EC2 Instance Profile name to use when creating EC2 instances */
+    public Builder applicationInstanceProfileName(String appInstanceProfileName) {
+      this.applicationInstanceProfileName = appInstanceProfileName;
+      return this;
+    }
     /** Set the metadata describing the Environment */
     public Builder metadata(Metadata metadata) {
       this.metadata = metadata;
@@ -83,6 +91,14 @@ public class Environment {
   /** Get a {@link Builder} for {@link Environment} */
   public static Builder builder() {
     return new Builder();
+  }
+
+  /**
+   * Get the name of the EC2 Instance Profile to use when creating EC2 instances to back
+   * applications.
+   */
+  public String getApplicationInstanceProfileName() {
+    return applicationInstanceProfileName;
   }
 
   /** Get the {@link Metadata} describing the {@link Environment} */
@@ -134,7 +150,8 @@ public class Environment {
     if (this == o) return true;
     if (!(o instanceof Environment)) return false;
     Environment that = (Environment) o;
-    return Objects.equals(metadata, that.metadata)
+    return Objects.equals(applicationInstanceProfileName, that.applicationInstanceProfileName)
+        && Objects.equals(metadata, that.metadata)
         && Objects.equals(workspaceManagerRoleArn, that.workspaceManagerRoleArn)
         && Objects.equals(userRoleArn, that.userRoleArn)
         && Objects.equals(notebookRoleArn, that.notebookRoleArn)
@@ -144,6 +161,11 @@ public class Environment {
   @Override
   public int hashCode() {
     return Objects.hash(
-        metadata, workspaceManagerRoleArn, userRoleArn, notebookRoleArn, landingZoneMap);
+        applicationInstanceProfileName,
+        metadata,
+        workspaceManagerRoleArn,
+        userRoleArn,
+        notebookRoleArn,
+        landingZoneMap);
   }
 }

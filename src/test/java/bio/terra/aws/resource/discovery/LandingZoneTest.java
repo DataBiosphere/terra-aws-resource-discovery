@@ -32,6 +32,8 @@ public class LandingZoneTest extends EnvironmentDiscoveryTestBase {
 
     LandingZone.Builder builder =
         LandingZone.builder()
+            .applicationVpcId(landingZone.getApplicationVpcId())
+            .applicationVpcPrivateSubnetId(landingZone.getApplicationVpcPrivateSubnetId())
             .metadata(new Metadata(metadata))
             .storageBucket(storageBucket.arn(), storageBucket.name())
             .kmsKey(kmsKey.arn(), kmsKey.id());
@@ -66,10 +68,34 @@ public class LandingZoneTest extends EnvironmentDiscoveryTestBase {
     KmsKey kmsKey = landingZone.getKmsKey();
     StorageBucket storageBucket = landingZone.getStorageBucket();
 
+    // Different App VPC ID
+    checkInequality(
+        landingZone,
+        LandingZone.builder()
+            .applicationVpcId("junk")
+            .applicationVpcPrivateSubnetId(landingZone.getApplicationVpcPrivateSubnetId())
+            .metadata(landingZone.getMetadata())
+            .storageBucket(storageBucket.arn(), storageBucket.name())
+            .kmsKey(kmsKey.arn(), kmsKey.id())
+            .build());
+
+    // Different App Private Subnet ID
+    checkInequality(
+        landingZone,
+        LandingZone.builder()
+            .applicationVpcId(landingZone.getApplicationVpcId())
+            .applicationVpcPrivateSubnetId("junk")
+            .metadata(landingZone.getMetadata())
+            .storageBucket(storageBucket.arn(), storageBucket.name())
+            .kmsKey(kmsKey.arn(), kmsKey.id())
+            .build());
+
     // Different Metadata
     checkInequality(
         landingZone,
         LandingZone.builder()
+            .applicationVpcId(landingZone.getApplicationVpcId())
+            .applicationVpcPrivateSubnetId(landingZone.getApplicationVpcPrivateSubnetId())
             // Create a junk metadata
             .metadata(
                 new Metadata(landingZone.getMetadata().toBuilder().majorVersion("junk").build()))
@@ -81,6 +107,8 @@ public class LandingZoneTest extends EnvironmentDiscoveryTestBase {
     checkInequality(
         landingZone,
         LandingZone.builder()
+            .applicationVpcId(landingZone.getApplicationVpcId())
+            .applicationVpcPrivateSubnetId(landingZone.getApplicationVpcPrivateSubnetId())
             .metadata(landingZone.getMetadata())
             .storageBucket(junkArn(), "")
             .kmsKey(kmsKey.arn(), kmsKey.id())
@@ -90,6 +118,8 @@ public class LandingZoneTest extends EnvironmentDiscoveryTestBase {
     checkInequality(
         landingZone,
         LandingZone.builder()
+            .applicationVpcId(landingZone.getApplicationVpcId())
+            .applicationVpcPrivateSubnetId(landingZone.getApplicationVpcPrivateSubnetId())
             .metadata(landingZone.getMetadata())
             .storageBucket(storageBucket.arn(), storageBucket.name())
             .kmsKey(junkArn(), UUID.randomUUID())
@@ -99,6 +129,8 @@ public class LandingZoneTest extends EnvironmentDiscoveryTestBase {
     checkInequality(
         landingZone,
         LandingZone.builder()
+            .applicationVpcId(landingZone.getApplicationVpcId())
+            .applicationVpcPrivateSubnetId(landingZone.getApplicationVpcPrivateSubnetId())
             .metadata(landingZone.getMetadata())
             .storageBucket(storageBucket.arn(), storageBucket.name())
             .kmsKey(kmsKey.arn(), kmsKey.id())
