@@ -23,12 +23,7 @@ LZ_AVRO="${1}/LandingZone.avsc"
 
 if [[ ! -f ${LZ_AVRO} ]]; then
   echo "Expected Environment schema file ${LZ_AVRO} not found."
-  exit 2
-fi
-
-if [[ ! -d "$2" ]]; then
-  echo "Source directory '$2' does not exist."
-  exit 4
+  exit 3
 fi
 
 if [[ ! -d "$2" ]]; then
