@@ -1,7 +1,7 @@
 // Library Dependencies, Versions, etc.
 dependencies {
     ext {
-        avro = '1.11.1'
+        avro = '1.11.2'
         junitJupiter = '5.9.2'
 
         diffplugSpotless = '6.10.0'
