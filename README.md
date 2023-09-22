@@ -144,7 +144,15 @@ Files `v1/landingzones/eu-central-1/config.json` and `v1/landingzones/eu-central
 schema [`LandingZone.avsc`](src/main/avro/LandingZone.avsc) to describe the Regional Support
 Resources in the Environment's Landing Zones in regions `eu-central-1` and `us-east-1` 
 respectively.
+
 # Library Development Notes
+
+## Dependency Locking
+We use [Gradle's dependency locking](https://docs.gradle.org/current/userguide/dependency_locking.html) to ensure that builds use the same transitive dependencies, so they're reproducible. This means that adding or updating a dependency requires telling Gradle to save the change. Execute the below command when any dependency versions are updated.
+```
+./gradlew dependencies --write-locks
+```
+
 ## Static Test Data
 Class [`EnvironmentDiscoveryTestBase`](src/test/java/bio/terra/aws/resource/discovery/EnvironmentDiscoveryTestBase.java) 
 serves as a test fixture consuming static test data written in folder
