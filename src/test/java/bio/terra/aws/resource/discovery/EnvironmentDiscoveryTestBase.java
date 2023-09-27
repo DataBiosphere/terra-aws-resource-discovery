@@ -155,7 +155,7 @@ public class EnvironmentDiscoveryTestBase {
     for (Region region : Region.regions()) {
       if (region.equals(Region.US_EAST_1) || region.equals(Region.US_WEST_1)) {
         Assertions.assertTrue(regionSet.contains(region));
-        Optional<LandingZone> expectedLandingZone = environment.getLandingZone(region);
+        Optional<LandingZone> expectedLandingZone = expectedEnvironment.getLandingZone(region);
         Optional<LandingZone> landingZone = environment.getLandingZone(region);
         Assertions.assertFalse(expectedLandingZone.isEmpty());
         Assertions.assertFalse(landingZone.isEmpty());
@@ -267,5 +267,85 @@ public class EnvironmentDiscoveryTestBase {
   public void addFieldBeforeSchemaUpdateTestLogic(EnvironmentDiscovery environmentDiscovery)
       throws IOException {
     noLandingZonesTestLogic(environmentDiscovery);
+  }
+
+  private void expectMissingLandingZoneOptionals(
+      LandingZone expectedLandingZone, LandingZone landingZone) {
+    Assertions.assertTrue(landingZone.getApplicationVpcId().isEmpty());
+    Assertions.assertTrue(landingZone.getApplicationVpcId().isEmpty());
+
+    Assertions.assertEquals(expectedLandingZone.getKmsKey(), landingZone.getKmsKey());
+    Assertions.assertEquals(expectedLandingZone.getMetadata(), landingZone.getMetadata());
+    Assertions.assertEquals(expectedLandingZone.getStorageBucket(), landingZone.getStorageBucket());
+    Assertions.assertEquals(
+        expectedLandingZone.getNotebookLifecycleConfigurations(),
+        landingZone.getNotebookLifecycleConfigurations());
+  }
+
+  private void expectMissingOptionals(EnvironmentDiscovery environmentDiscovery)
+      throws IOException {
+    Environment environment = environmentDiscovery.discoverEnvironment();
+
+    // Assert that App Instance Profile Name returns an empty optional
+    Assertions.assertTrue(environment.getApplicationInstanceProfileName().isEmpty());
+
+    // All other Global Support Resources should match
+    Assertions.assertEquals(expectedEnvironment.getMetadata(), environment.getMetadata());
+    Assertions.assertEquals(
+        expectedEnvironment.getNotebookRoleArn(), environment.getNotebookRoleArn());
+    Assertions.assertEquals(expectedEnvironment.getUserRoleArn(), environment.getUserRoleArn());
+    Assertions.assertEquals(
+        expectedEnvironment.getWorkspaceManagerRoleArn(), environment.getWorkspaceManagerRoleArn());
+
+    Set<Region> regionSet = environment.getSupportedRegions();
+
+    for (Region region : Region.regions()) {
+      if (region.equals(Region.US_EAST_1) || region.equals(Region.US_WEST_1)) {
+        Assertions.assertTrue(regionSet.contains(region));
+        Optional<LandingZone> expectedLandingZone = expectedEnvironment.getLandingZone(region);
+        Optional<LandingZone> landingZone = environment.getLandingZone(region);
+        Assertions.assertFalse(expectedLandingZone.isEmpty());
+        Assertions.assertFalse(landingZone.isEmpty());
+        expectMissingLandingZoneOptionals(expectedLandingZone.get(), landingZone.get());
+      } else {
+        Assertions.assertFalse(regionSet.contains(region));
+        Assertions.assertTrue(expectedEnvironment.getLandingZone(region).isEmpty());
+        Assertions.assertTrue(environment.getLandingZone(region).isEmpty());
+      }
+    }
+  }
+
+  public String getAppsDisabledTestDataBucketName() {
+    return "apps_disabled";
+  }
+
+  public Path getAppsDisabledTestDataPath() {
+    return basePath.resolve(getAppsDisabledTestDataBucketName());
+  }
+
+  /**
+   * Test data contains latest schema with optional Application Support Resources not present.
+   * Verifies that parsing with current schema as "reader" schema succeeds, and that getting these
+   * resource returns empty optionals.
+   */
+  public void appsDisabledTTestLogic(EnvironmentDiscovery environmentDiscovery) throws IOException {
+    expectMissingOptionals(environmentDiscovery);
+  }
+
+  public String getV0_5BackwardTestDataBucketName() {
+    return "v0_5_backward";
+  }
+
+  public Path getV0_5BackwardTestDataPath() {
+    return basePath.resolve(getAppsDisabledTestDataBucketName());
+  }
+
+  /**
+   * Test data contains v0.5 schema which does not contain Application Support Resources. Verifies
+   * that parsing them with latest schema as "reader" schema succeeds and that getting these
+   * resources returns empty optionals.
+   */
+  public void v0_5BackwardTestLogic(EnvironmentDiscovery environmentDiscovery) throws IOException {
+    expectMissingOptionals(environmentDiscovery);
   }
 }

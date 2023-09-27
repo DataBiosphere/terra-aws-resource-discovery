@@ -97,4 +97,18 @@ public class S3EnvironmentDiscoveryTest extends EnvironmentDiscoveryTestBase {
         new S3EnvironmentDiscovery(getAddFieldBeforeSchemaUpdateTestDataBucketName(), s3Client);
     addFieldBeforeSchemaUpdateTestLogic(discovery);
   }
+
+  @Test
+  public void appsDisabled() throws IOException {
+    EnvironmentDiscovery discovery =
+        new S3EnvironmentDiscovery(getAppsDisabledTestDataBucketName(), s3Client);
+    appsDisabledTTestLogic(discovery);
+  }
+
+  @Test
+  public void v0_5Backward() throws IOException {
+    EnvironmentDiscovery discovery =
+        new S3EnvironmentDiscovery(getV0_5BackwardTestDataBucketName(), s3Client);
+    v0_5BackwardTestLogic(discovery);
+  }
 }

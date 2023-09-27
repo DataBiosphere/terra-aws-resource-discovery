@@ -3,26 +3,23 @@ package bio.terra.aws.resource.discovery;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import software.amazon.awssdk.arns.Arn;
 import software.amazon.awssdk.utils.Validate;
 
 /** Represents all the Regional Support Resources in a Terra AWS Landing Zone. */
 public class LandingZone {
-  private final String applicationVpcId;
-  private final String applicationVpcPrivateSubnetId;
+  private final Optional<String> applicationVpcId;
+  private final Optional<String> applicationVpcPrivateSubnetId;
   private final Metadata metadata;
   private final StorageBucket storageBucket;
   private final KmsKey kmsKey;
   private final List<NotebookLifecycleConfiguration> notebookLifecycleConfigurations;
 
   private LandingZone(Builder builder) {
-    Validate.notNull(builder.applicationVpcId, "Application VPC ID may not be null.");
-    this.applicationVpcId = builder.applicationVpcId;
-
-    Validate.notNull(
-        builder.applicationVpcPrivateSubnetId, "Application VPC Subnet ID may not be null.");
-    this.applicationVpcPrivateSubnetId = builder.applicationVpcPrivateSubnetId;
+    this.applicationVpcId = Optional.ofNullable(builder.applicationVpcId);
+    this.applicationVpcPrivateSubnetId = Optional.ofNullable(builder.applicationVpcPrivateSubnetId);
 
     Validate.notNull(builder.metadata, "Metadata may not be null.");
     this.metadata = builder.metadata;
@@ -99,13 +96,24 @@ public class LandingZone {
     }
   }
 
-  /** Get the ID of the dedicated VPC to place Application EC2 instances into. */
-  public String getApplicationVpcId() {
+  /**
+   * Get the ID of the dedicated VPC to place Application EC2 instances into, if one exists.
+   *
+   * @return a populated {@link Optional<String>} if the Landing Zone has a defined VPC, an empty
+   *     Optional otherwise.
+   */
+  public Optional<String> getApplicationVpcId() {
     return applicationVpcId;
   }
 
-  /** Get the ID of the dedicated private VPC subnet to place Application EC2 instances into. */
-  public String getApplicationVpcPrivateSubnetId() {
+  /**
+   * Get the ID of the dedicated private VPC subnet to place Application EC2 instances into, if one
+   * exists.
+   *
+   * @return a populated {@link Optional<String>} if the Landing Zone has a defined VPC Private
+   *     Subnet, an empty Optional otherwise.
+   */
+  public Optional<String> getApplicationVpcPrivateSubnetId() {
     return applicationVpcPrivateSubnetId;
   }
 
