@@ -102,7 +102,7 @@ public class S3EnvironmentDiscoveryTest extends EnvironmentDiscoveryTestBase {
   public void appsDisabled() throws IOException {
     EnvironmentDiscovery discovery =
         new S3EnvironmentDiscovery(getAppsDisabledTestDataBucketName(), s3Client);
-    appsDisabledTTestLogic(discovery);
+    appsDisabledTestLogic(discovery);
   }
 
   @Test

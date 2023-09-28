@@ -272,7 +272,7 @@ public class EnvironmentDiscoveryTestBase {
   private void expectMissingLandingZoneOptionals(
       LandingZone expectedLandingZone, LandingZone landingZone) {
     Assertions.assertTrue(landingZone.getApplicationVpcId().isEmpty());
-    Assertions.assertTrue(landingZone.getApplicationVpcId().isEmpty());
+    Assertions.assertTrue(landingZone.getApplicationVpcPrivateSubnetId().isEmpty());
 
     Assertions.assertEquals(expectedLandingZone.getKmsKey(), landingZone.getKmsKey());
     Assertions.assertEquals(expectedLandingZone.getMetadata(), landingZone.getMetadata());
@@ -328,7 +328,7 @@ public class EnvironmentDiscoveryTestBase {
    * Verifies that parsing with current schema as "reader" schema succeeds, and that getting these
    * resource returns empty optionals.
    */
-  public void appsDisabledTTestLogic(EnvironmentDiscovery environmentDiscovery) throws IOException {
+  public void appsDisabledTestLogic(EnvironmentDiscovery environmentDiscovery) throws IOException {
     expectMissingOptionals(environmentDiscovery);
   }
 

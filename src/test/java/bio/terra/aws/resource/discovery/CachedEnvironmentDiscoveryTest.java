@@ -64,7 +64,7 @@ public class CachedEnvironmentDiscoveryTest extends EnvironmentDiscoveryTestBase
         new FilesystemEnvironmentDiscovery(getAppsDisabledTestDataPath());
     CachedEnvironmentDiscovery cachedEnvironmentDiscovery =
         new CachedEnvironmentDiscovery(discovery, expirationPeriod);
-    appsDisabledTTestLogic(cachedEnvironmentDiscovery);
+    appsDisabledTestLogic(cachedEnvironmentDiscovery);
   }
 
   @Test

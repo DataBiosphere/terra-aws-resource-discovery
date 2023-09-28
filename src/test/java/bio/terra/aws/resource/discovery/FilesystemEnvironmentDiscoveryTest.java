@@ -56,7 +56,7 @@ public class FilesystemEnvironmentDiscoveryTest extends EnvironmentDiscoveryTest
   public void appsDisabled() throws IOException {
     EnvironmentDiscovery discovery =
         new FilesystemEnvironmentDiscovery(getAppsDisabledTestDataPath());
-    appsDisabledTTestLogic(discovery);
+    appsDisabledTestLogic(discovery);
   }
 
   @Test
