@@ -58,6 +58,26 @@ public class CachedEnvironmentDiscoveryTest extends EnvironmentDiscoveryTestBase
   }
 
   @Test
+  public void appsDisabled() throws IOException {
+    Duration expirationPeriod = Duration.ofMillis(500);
+    EnvironmentDiscovery discovery =
+        new FilesystemEnvironmentDiscovery(getAppsDisabledTestDataPath());
+    CachedEnvironmentDiscovery cachedEnvironmentDiscovery =
+        new CachedEnvironmentDiscovery(discovery, expirationPeriod);
+    appsDisabledTestLogic(cachedEnvironmentDiscovery);
+  }
+
+  @Test
+  public void v0_5TBackward() throws IOException {
+    Duration expirationPeriod = Duration.ofMillis(500);
+    EnvironmentDiscovery discovery =
+        new FilesystemEnvironmentDiscovery(getV0_5BackwardTestDataPath());
+    CachedEnvironmentDiscovery cachedEnvironmentDiscovery =
+        new CachedEnvironmentDiscovery(discovery, expirationPeriod);
+    v0_5BackwardTestLogic(cachedEnvironmentDiscovery);
+  }
+
+  @Test
   public void expiration() throws IOException, InterruptedException {
     Duration expirationPeriod = Duration.ofMillis(500);
     EnvironmentDiscovery discovery =

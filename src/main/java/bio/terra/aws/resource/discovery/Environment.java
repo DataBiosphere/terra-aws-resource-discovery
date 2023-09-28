@@ -18,7 +18,7 @@ import software.amazon.awssdk.regions.Region;
  * LandingZone}.
  */
 public class Environment {
-  private final String applicationInstanceProfileName;
+  private final Optional<String> applicationInstanceProfileName;
   private final Metadata metadata;
   private final Arn workspaceManagerRoleArn;
   private final Arn userRoleArn;
@@ -26,7 +26,7 @@ public class Environment {
   private final Map<Region, LandingZone> landingZoneMap;
 
   private Environment(Builder builder) {
-    applicationInstanceProfileName = builder.applicationInstanceProfileName;
+    applicationInstanceProfileName = Optional.ofNullable(builder.applicationInstanceProfileName);
     metadata = builder.metadata;
     workspaceManagerRoleArn = builder.workspaceManagerRoleArn;
     userRoleArn = builder.userRoleArn;
@@ -95,9 +95,12 @@ public class Environment {
 
   /**
    * Get the name of the EC2 Instance Profile to use when creating EC2 instances to back
-   * applications.
+   * applications if one exists.
+   *
+   * @return a populated {@link Optional<String>} if the Environment has a defined Application
+   *     Instance Profile, an empty Optional otherwise.
    */
-  public String getApplicationInstanceProfileName() {
+  public Optional<String> getApplicationInstanceProfileName() {
     return applicationInstanceProfileName;
   }
 

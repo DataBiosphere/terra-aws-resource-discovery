@@ -5,11 +5,13 @@
   "fields": [
     {
       "name": "app_framework_private_subnet_id",
-      "type": "string"
+      "type": ["null","string"],
+      "default": null
     },
     {
       "name": "app_framework_vpc_id",
-      "type": "string"
+      "type": ["null","string"],
+      "default": null
     },
     {
       "name": "bucket_arn",

@@ -35,7 +35,8 @@ public class EnvironmentTest extends EnvironmentDiscoveryTestBase {
     // Deep copy
     Environment.Builder builder =
         Environment.builder()
-            .applicationInstanceProfileName(environment.getApplicationInstanceProfileName())
+            .applicationInstanceProfileName(
+                environment.getApplicationInstanceProfileName().orElse(null))
             .metadata(environment.getMetadata())
             .notebookRoleArn(environment.getNotebookRoleArn())
             .userRoleArn(environment.getUserRoleArn())
@@ -85,7 +86,8 @@ public class EnvironmentTest extends EnvironmentDiscoveryTestBase {
     checkInequality(
         environment,
         Environment.builder()
-            .applicationInstanceProfileName(environment.getApplicationInstanceProfileName())
+            .applicationInstanceProfileName(
+                environment.getApplicationInstanceProfileName().orElse(null))
             .metadata(buildJunkMetadata())
             .notebookRoleArn(environment.getNotebookRoleArn())
             .userRoleArn(environment.getUserRoleArn())
@@ -96,7 +98,8 @@ public class EnvironmentTest extends EnvironmentDiscoveryTestBase {
     checkInequality(
         environment,
         Environment.builder()
-            .applicationInstanceProfileName(environment.getApplicationInstanceProfileName())
+            .applicationInstanceProfileName(
+                environment.getApplicationInstanceProfileName().orElse(null))
             .metadata(environment.getMetadata())
             .notebookRoleArn(junkArn())
             .userRoleArn(environment.getUserRoleArn())
@@ -107,7 +110,8 @@ public class EnvironmentTest extends EnvironmentDiscoveryTestBase {
     checkInequality(
         environment,
         Environment.builder()
-            .applicationInstanceProfileName(environment.getApplicationInstanceProfileName())
+            .applicationInstanceProfileName(
+                environment.getApplicationInstanceProfileName().orElse(null))
             .metadata(environment.getMetadata())
             .notebookRoleArn(environment.getNotebookRoleArn())
             .userRoleArn(junkArn())
@@ -118,7 +122,8 @@ public class EnvironmentTest extends EnvironmentDiscoveryTestBase {
     checkInequality(
         environment,
         Environment.builder()
-            .applicationInstanceProfileName(environment.getApplicationInstanceProfileName())
+            .applicationInstanceProfileName(
+                environment.getApplicationInstanceProfileName().orElse(null))
             .metadata(environment.getMetadata())
             .notebookRoleArn(environment.getNotebookRoleArn())
             .userRoleArn(environment.getUserRoleArn())
@@ -129,7 +134,8 @@ public class EnvironmentTest extends EnvironmentDiscoveryTestBase {
     checkInequality(
         environment,
         Environment.builder()
-            .applicationInstanceProfileName(environment.getApplicationInstanceProfileName())
+            .applicationInstanceProfileName(
+                environment.getApplicationInstanceProfileName().orElse(null))
             .metadata(environment.getMetadata())
             .notebookRoleArn(environment.getNotebookRoleArn())
             .userRoleArn(environment.getUserRoleArn())

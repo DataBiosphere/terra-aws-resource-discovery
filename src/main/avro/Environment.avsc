@@ -5,7 +5,8 @@
   "fields": [
     {
         "name": "app_instance_profile_name",
-        "type": "string"
+        "type": ["null","string"],
+        "default": null
     },
     {
       "name": "metadata",

@@ -51,4 +51,18 @@ public class FilesystemEnvironmentDiscoveryTest extends EnvironmentDiscoveryTest
         new FilesystemEnvironmentDiscovery(getAddFieldBeforeSchemaUpdateTestDataPath());
     addFieldBeforeSchemaUpdateTestLogic(discovery);
   }
+
+  @Test
+  public void appsDisabled() throws IOException {
+    EnvironmentDiscovery discovery =
+        new FilesystemEnvironmentDiscovery(getAppsDisabledTestDataPath());
+    appsDisabledTestLogic(discovery);
+  }
+
+  @Test
+  public void v0_5Backward() throws IOException {
+    EnvironmentDiscovery discovery =
+        new FilesystemEnvironmentDiscovery(getV0_5BackwardTestDataPath());
+    v0_5BackwardTestLogic(discovery);
+  }
 }
