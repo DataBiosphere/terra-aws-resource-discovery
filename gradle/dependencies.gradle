@@ -1,11 +1,11 @@
 // Library Dependencies, Versions, etc.
 dependencies {
     ext {
-        avro = '1.11.2'
+        avro = '1.11.3'
         junitJupiter = '5.9.2'
 
         diffplugSpotless = '6.10.0'
-        javaFormat = '1.16.0'
+        javaFormat = '1.19.2'
     }
 
     // Used internally, and not exposed to consumers on their own compile classpath.
@@ -18,7 +18,7 @@ dependencies {
     compileOnly group: 'com.google.googlejavaformat', name: 'google-java-format', version: "${javaFormat}"
 
     // AWS dependencies
-    implementation platform('software.amazon.awssdk:bom:2.18.34')
+    implementation platform('software.amazon.awssdk:bom:2.23.8')
     implementation 'software.amazon.awssdk:arns'
     implementation 'software.amazon.awssdk:regions'
     implementation 'software.amazon.awssdk:s3'
