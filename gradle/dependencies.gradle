@@ -23,6 +23,12 @@ dependencies {
     implementation 'software.amazon.awssdk:regions'
     implementation 'software.amazon.awssdk:s3'
 
+    // Constraints on dependencies pulled in by other libraries for security
+    // concerns.
+    constraints {
+        implementation('org.apache.commons:commons-compress:1.26.0')
+    }
+
     // Dependencies to enable mocking S3
     testImplementation group: 'io.findify', name: 's3mock_2.13', version: '0.2.6'
     testImplementation group: 'org.eclipse.jdt', name: 'org.eclipse.jdt.launching', version: '3.10.0'
